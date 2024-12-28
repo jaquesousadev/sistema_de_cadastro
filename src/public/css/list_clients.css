@@ -1,0 +1,135 @@
+/* Fonte padrão */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa; /* Cor de fundo leve */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container principal */
+  .list-clients-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Estilo para o topo da página */
+.top-bar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+/* Botão de voltar */
+.back-button {
+  display: flex;
+  align-items: center;
+  border: none;
+  background-color: #f8f9fa;
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.back-button:hover {
+  background-color: #e2e6ea;
+}
+
+.back-button i {
+  margin-right: 8px;
+}
+
+
+  
+  /* Título */
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  /* Estilo para a barra de pesquisa */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.search-bar input {
+  width: 60%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-bar button {
+  padding: 8px 20px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-bar button:hover {
+  background-color: #0056b3;
+}
+  
+  /* Estilo para o container da lista */
+#client-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Estilo para cada item da lista */
+  .client-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+  }
+  
+  .client-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Estilo para o texto informativo */
+  .client-info {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Estilo para os botões de ação */
+  .client-actions button {
+    margin-left: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .client-actions .btn-light {
+    color: #007bff;
+  }
+  
+  .client-actions .btn-danger {
+    color: #dc3545;
+  }
+  
+  .client-actions i {
+    font-size: 18px;
+  }
+  
+  

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Clientes</title>
+  <!-- Link do Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center">Cadastro de Cliente</h1>
+    <form id="register-client-form">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="empresa">Empresa:</label>
+          <input type="text" class="form-control" id="empresa" name="empresa" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="operadora">Operadora:</label>
+          <input type="text" class="form-control" id="operadora" name="operadora" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="plano">Plano:</label>
+          <input type="text" class="form-control" id="plano" name="plano" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="apolice">Nº Apólice/Contrato:</label>
+          <input type="text" class="form-control" id="apolice" name="apolice" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="valor">Valor:</label>
+          <input type="text" class="form-control" id="valor" name="valor" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="responsavel">Nome Responsável:</label>
+          <input type="text" class="form-control" id="responsavel" name="responsavel" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="phone">Telefone:</label>
+          <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="senha_email">Senha do Email:</label>
+          <input type="text" class="form-control" id="senha_email" name="senha_email" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="mes_reajuste">Mês de Reajuste:</label>
+          <input type="text" class="form-control" id="mes_reajuste" name="mes_reajuste" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="login_portal">Login Portal Operadora:</label>
+          <input type="text" class="form-control" id="login_portal" name="login_portal" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="senha_portal">Senha Portal Operadora:</label>
+          <input type="text" class="form-control" id="senha_portal" name="senha_portal" required>
+        </div>
+      </div>
+      <div class="form-group col-md-12 text-right">
+        <button type="submit" class="btn btn-primary">Registrar</button>
+        <button type="button" class="btn btn-secundary" onclick="window.location.href='/dashboard.html'">Voltar</button>
+      </div>
+    </form>
+  </div>
+  <script src="/public/js/register_client.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
