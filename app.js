@@ -38,4 +38,16 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+const http = require('http');
+const port = process.env.PORT || 3001;
+
+// Criação do servidor HTTP
+const server = http.createServer(app);
+
+// Configuração para escutar em todos os endereços IP
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Servidor rodando em http://0.0.0.0:${port}`);
+});
+
+
 module.exports = app;
