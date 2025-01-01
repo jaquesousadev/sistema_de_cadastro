@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="stylesheets/dashboard.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Bem-vindo ao Dashboard</h1>
+    <div class="button-container">
+        <button onclick="window.location.href='register_client.html'">
+          <img src="icons/user.png" alt="Cadastro de Clientes">
+          <span>Cadastro de Clientes</span>
+        </button>
+        <button onclick="window.location.href='list_clients.html'">
+          <img src="icons/age-alt.png" alt="Lista de Clientes">
+          <span>Lista de Clientes</span>
+        </button>
+        <button onclick="window.location.href='list_users.html'">
+          <img src="icons/admin-alt.png" alt="Lista de Usuários">
+          <span>Lista de Usuários</span>
+        </button>      
+    </div>
+    
+
+    <button class="logout-button" onclick="logout()">Sair</button>
+  </div>
+  <script src="javascripts/dashboard.js"></script>
+</body>
+</html>
