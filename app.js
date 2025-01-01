@@ -39,7 +39,7 @@ app.use(function(err, req, res, next) {
 });
 
 const http = require('http');
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3002;
 
 // Criação do servidor HTTP
 const server = http.createServer(app);
