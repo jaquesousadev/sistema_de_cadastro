@@ -47,6 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify({ username, password, email })
           });
+
+          // Verifica se o retorno é JSON
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Erro do servidor:', errorText);
+            alert('Erro ao registrar usuário: ' + errorText);
+            return;
+          }
   
           const result = await response.json();
   

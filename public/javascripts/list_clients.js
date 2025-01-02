@@ -3,7 +3,7 @@ async function fetchClients() {
     const response = await fetch('/clients');
     if (!response.ok) throw new Error('Erro ao buscar clientes');
     
-    const clients = await response.json();
+    const { clients } = await response.json(); // Extrai a propriedade clients
     window.clientsData = clients; // Armazena os dados globalmente para facilitar a filtragem
     displayClients(clients);
   } catch (error) {
@@ -22,7 +22,7 @@ function displayClients(clients) {
     
     li.innerHTML = `
       <span class="client-info">
-        <strong>${client.empresa}</strong> - Operadora: ${client.operadora}, Plano: ${client.plano}, Mês Reajuste: ${client.mes_reajuste}, Login Portal Operadora: ${client.login_portal}, Senha Portal Operadora: ${client.senha_portal} 
+        <strong>${client.empresa}</strong> - Operadora: ${client.operadora}, Mês Reajuste: ${client.mes_reajuste}, Login Portal Operadora: ${client.login_portal}, Senha Portal Operadora: ${client.senha_portal} 
       </span>
       <span class="client-actions">
         <button class="btn btn-sm btn-light" onclick="editClient(${client.id})">

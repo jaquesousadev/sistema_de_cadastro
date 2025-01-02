@@ -10,17 +10,36 @@ class Client {
     db.query(query, [
       client.empresa, client.operadora, client.plano, client.apolice, client.valor, client.responsavel, client.phone, client.email,
       client.senha_email, client.mes_reajuste, client.login_portal, client.senha_portal
-    ], callback);
+    ], (err,result) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback (null, result);
+      }
+    });
+    
   }
 
   static findAll(callback) {
     const query = 'SELECT * FROM clients';
-    db.query(query, callback);
+    db.query(query, (err, result) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback (null, result);
+      }
+      });
   }
 
   static findById(id, callback) {
     const query = 'SELECT * FROM clients WHERE id = ?';
-    db.query(query, [id], callback);
+    db.query(query, [id], (err, result) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback (null, result[0]);
+      }
+      });
   }
 
   static updateById(id, client, callback) {
@@ -31,12 +50,24 @@ class Client {
     db.query(query, [
       client.empresa, client.operadora, client.plano, client.apolice, client.valor, client.responsavel, client.phone, client.email,
       client.senha_email, client.mes_reajuste, client.login_portal, client.senha_portal, id
-    ], callback);
+    ], (err, result) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback (null, result);
+      }
+      });
   }
 
   static deleteById(id, callback) {
     const query = 'DELETE FROM clients WHERE id = ?';
-    db.query(query, [id], callback);
+    db.query(query, [id], (err, result) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback (null, result);
+      }
+      });
   }
 }
 

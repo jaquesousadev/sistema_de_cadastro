@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/userModel');
+const db = require('../config/db');
 
-// Rota de registro de usuário
+// Rota de registro
 router.post('/register', (req, res) => {
   const { username, password, email } = req.body;
 
