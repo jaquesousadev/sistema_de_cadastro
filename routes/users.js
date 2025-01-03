@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
       return res.status(500).json({ success: false, message: err.message});
     }
     res.json({ success: true, users: results });
-  });
+  });  
 });
 
 module.exports = router;

@@ -33,4 +33,5 @@ async function fetchUsers() {
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchUsers();
+  
 });
