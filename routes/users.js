@@ -22,4 +22,15 @@ router.post('/register', (req, res) => {
   });
 });
 
+// Rota para listar todos os usuários
+router.get('/', (req, res) => {
+  const query = 'SELECT username, email FROM users';
+  db.query(query, (err, results) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: err.message});
+    }
+    res.json({ success: true, users: results });
+  });
+});
+
 module.exports = router;

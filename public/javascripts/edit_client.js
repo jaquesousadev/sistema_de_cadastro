@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('mes_reajuste').value = client.mes_reajuste || '';
     document.getElementById('login_portal').value = client.login_portal || '';
     document.getElementById('senha_portal').value = client.senha_portal || '';
+    document.getElementById('plataforma').value = client.plataforma || '';
   } catch (error) {
     alert('Erro ao carregar dados do cliente: ' + error.message);
   }
@@ -49,10 +50,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mes_reajuste = document.getElementById('mes_reajuste').value;
     const login_portal = document.getElementById('login_portal').value;
     const senha_portal = document.getElementById('senha_portal').value;
+    const plataforma = document.getElementById('plataforma').value;
 
     console.log('Dados do cliente:', {
       empresa, operadora, plano, apolice, valor, responsavel, phone, email,
-      senha_email, mes_reajuste, login_portal, senha_portal
+      senha_email, mes_reajuste, login_portal, senha_portal, plataforma
     }); // Verificação
   
     const response = await fetch(`/clients/${id}`, {
@@ -62,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       },
       body: JSON.stringify({
         empresa, operadora, plano, apolice, valor, responsavel, phone, email,
-        senha_email, mes_reajuste, login_portal, senha_portal
+        senha_email, mes_reajuste, login_portal, senha_portal, plataforma
       })
     });
   

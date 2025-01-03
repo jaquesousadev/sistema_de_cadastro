@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
+  <link rel="icon" type="image/png" href="./images/logojalves.png">
   <link rel="stylesheet" href="stylesheets/dashboard.css">
 </head>
 <body>
@@ -21,11 +22,24 @@
         <button onclick="window.location.href='list_users.html'">
           <img src="icons/admin-alt.png" alt="Lista de Usuários">
           <span>Lista de Usuários</span>
-        </button>      
+        </button>         
+    </div>
+    <div class="button-container-secondary">
+      <button onclick="window.location.href='https://dashboard-simp.agencialink.com.br/login'">
+        <img src="icons/agencialink.jpg" alt="logo-agencialink">
+        <span>Cotador Agencialink</span>
+      </button> 
+      <button onclick="window.location.href='https://account.trindadetecnologia.com.br/login?signin=b06f5d453b5f66e52d7a21bf9138d5fa'">
+        <img src="icons/logo_mybro-02.png" alt="logo-mybro">
+        <span>Cotador Mybro</span>
+      </button>      
     </div>
     
 
-    <button class="logout-button" onclick="logout()">Sair</button>
+    <button class="logout-button" onclick="logout()">
+      <img src="icons/logout.png" alt="logout">
+      <span>Sair</span>
+    </button>
   </div>
   <script src="javascripts/dashboard.js"></script>
 </body>

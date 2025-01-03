@@ -13,23 +13,26 @@ body {
     align-items: center; /* Centraliza os itens horizontalmente */
     height: 100vh; /* Garante que ocupe a altura total da tela */
     text-align: center;
-    padding-top: 80px; /* Ajuste para dar espaço do topo */
+    padding-top: 100px; /* Ajuste para dar espaço do topo */
 }
   
 h1 {
     font-size: 2rem;
-    margin-bottom: 100px; /* Espaçamento entre título e botões */
+    margin-bottom: 80px; /* Espaçamento entre título e botões */
     font-weight: bold;
 }
   
-.button-container {
+.button-container, .button-container-secondary {
     display: flex; /* Organiza os botões horizontalmente */
     justify-content: center; /* Centraliza os botões */
     align-items: center; /* Alinha os botões verticalmente */
     gap: 20px; /* Espaçamento entre os botões */
+    padding: 20px;
 }
   
   button {
+    width: 200px; /* Largura fixa para todos os botões */
+    height: 200px; /* Altura fixa para todos os botões */
     background: none; /* Remove o fundo */
     border: none; /* Remove a borda */
     text-decoration: none; /* Remove o sublinhado */
@@ -57,28 +60,74 @@ button span {
   button:hover {
     color: black; /* Efeito de hover - muda a cor */
     transform: translateY(-5px); /* Move o botão para cima ao passar o mouse */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
+    
   }
   
   button img {
-    width: 50px; /* Ajuste o tamanho do ícone */
-    height: 50px;
+    width: 100px; /* Ajuste o tamanho do ícone */
+    height: 100px;
     margin-bottom: 5px;
   }
   
   .logout-button {
-    margin-top: 50px;
+    width: 80px; /* Largura fixa para todos os botões */
+    height: 80px; /* Altura fixa para todos os botões */
+    position: absolute;
+    top: 10px; /* Distância do topo */
+    right: 10px; /* Distância da direita */
     padding: 10px 20px;
     font-size: 1rem;
     color: #ffffff;
-    background-color: #dc3545; /* Cor vermelha */
+    background-color: none;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  
-  .logout-button:hover {
-    background-color: #b02a37; /* Cor vermelha escura ao passar o mouse */
+
+  .logout-button img {
+    width: 50px; /* Ajuste o tamanho do ícone */
+    height: 50px;
+    margin-bottom: 5px;
   }
-  
+
+    
+  .logout-button:hover {
+    color: red; /* Efeito de hover - muda a cor */ 
+    background-color: #ffffff;
+    transform: none;
+    box-shadow: none;
+    
+  }
+
+  @media screen and (max-width: 1086px){
+    .dashboard-container {
+    padding: 20px; 
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      padding: 80px;
+    }
+
+    .button-container {
+      gap: 0px;
+    }
+
+    button {
+      max-width: 150px;
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+
+    button img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .logout-button {
+      right: 5px;
+    }
+
+  }

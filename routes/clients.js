@@ -16,11 +16,15 @@ router.post('/create', (req, res) => {
     senha_email: req.body.senha_email,
     mes_reajuste: req.body.mes_reajuste,
     login_portal: req.body.login_portal,
-    senha_portal: req.body.senha_portal
+    senha_portal: req.body.senha_portal,
+    plataforma: req.body.plataforma
   };
+
+  console.log("Dados do cliente para criar:", clientData); // log dos dados
 
   Client.create(clientData, (err, result) => {
     if (err) {
+      console.error("Erro ao criar cliente:", err); // Log de erro
       return res.status(500).json({ success: false, message: err.message });
     }
     res.json({ success: true, message: 'Cliente registrado com sucesso!' });
@@ -67,11 +71,15 @@ router.put('/:id', (req, res) => {
       senha_email: req.body.senha_email,
       mes_reajuste: req.body.mes_reajuste,
       login_portal: req.body.login_portal,
-      senha_portal: req.body.senha_portal
+      senha_portal: req.body.senha_portal,
+      plataforma: req.body.plataforma
     };
+
+    console.log("Dados do cliente para atualizar:", clientData); // Log dos dados recebidos
   
     Client.updateById(clientId, clientData, (err, result) => {
       if (err) {
+        console.error("Erro ao atualizar cliente:", err); // Log de erro
         return res.status(500).json({ success: false, message: err.message });
       }
       res.json({ success: true, message: 'Cliente atualizado com sucesso!' });

@@ -12,6 +12,7 @@ document.getElementById('register-client-form')?.addEventListener('submit', asyn
   const mes_reajuste = document.getElementById('mes_reajuste').value;
   const login_portal = document.getElementById('login_portal').value;
   const senha_portal = document.getElementById('senha_portal').value;
+  const plataforma = document.getElementById('plataforma').value;
 
   const response = await fetch('/clients/create', {
     method: 'POST',
@@ -20,7 +21,7 @@ document.getElementById('register-client-form')?.addEventListener('submit', asyn
     },
     body: JSON.stringify({
       empresa, operadora, plano, apolice, valor, responsavel, phone, email,
-      senha_email, mes_reajuste, login_portal, senha_portal
+      senha_email, mes_reajuste, login_portal, senha_portal, plataforma
     })
   });
 
