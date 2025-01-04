@@ -34,7 +34,4 @@ function displayUsers(users) {
 // Carrega os usuários ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
   fetchUsers();
-
-  // Adiciona o evento de clique ao botão de pesquisa
-  document.getElementById('search-button').addEventListener('click', filterUsers);
 });
