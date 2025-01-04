@@ -3,6 +3,10 @@ async function fetchUsers() {
     const response = await fetch('/users');
     const data = await response.json();
 
+    if (contentType && contentType.indexOf('application/json') !== -1) {
+      const data = await response.json();
+    }
+
     // Verifica se a estrutura da resposta está correta
     if (data.success && Array.isArray(data.users)) {
       const users = data.users;
