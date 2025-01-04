@@ -1,37 +1,48 @@
 async function fetchUsers() {
   try {
     const response = await fetch('/users');
-    const data = await response.json();
-
-    // Verifica se a estrutura da resposta está correta
-    if (data.success && Array.isArray(data.users)) {
-      const users = data.users;
-      const userList = document.getElementById('user-list');
-      userList.innerHTML = ''; // Limpando a lista antes de adicionar novos itens
-
-      // Adicionando um cartão para cada usuário
-      users.forEach(user => {
-        const userCard = document.createElement('div');
-        userCard.classList.add('user-card'); // Classe para estilizar o cartão do usuário
-
-        userCard.innerHTML = `
-          <div class="user-info">
-            <h5>${user.username}</h5>
-            <p>Email: ${user.email}</p>
-          </div>
-        `;
-
-        userList.appendChild(userCard);
-      });
-    } else {
-      console.error('Formato de resposta inesperado:', data);
-    }
+    if (!response.ok) throw new Error('Erro ao buscar usuários');
+    
+    const { users } = await response.json(); // Extrai a propriedade users
+    window.usersData = users; // Armazena os dados globalmente para facilitar a filtragem
+    displayUsers(users);
   } catch (error) {
-    console.error('Erro ao buscar usuários:', error);
+    alert('Falha ao carregar a lista de usuários: ' + error.message);
   }
 }
 
+function displayUsers(users) {
+  const userList = document.getElementById('user-list');
+  userList.innerHTML = ''; // Limpa a lista existente
+  
+  users.forEach(user => {
+    // Cria o card do usuário
+    const userCard = document.createElement('div');
+    userCard.className = 'user-card'; // Classe para estilização do card
+    
+    userCard.innerHTML = `
+      <div class="user-info">
+        <h5>${user.username}</h5>
+        <p>Email: ${user.email}</p>
+      </div>
+    `;
+    
+    userList.appendChild(userCard); // Adiciona o card à lista
+  });
+}
+
+function filterUsers() {
+  const searchInput = document.getElementById('search-input').value.toLowerCase();
+  const filteredUsers = window.usersData.filter(user =>
+    user.username.toLowerCase().includes(searchInput)
+  );
+  displayUsers(filteredUsers);
+}
+
+// Carrega os usuários ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
   fetchUsers();
-  
+
+  // Adiciona o evento de clique ao botão de pesquisa
+  document.getElementById('search-button').addEventListener('click', filterUsers);
 });
