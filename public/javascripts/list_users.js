@@ -31,14 +31,6 @@ function displayUsers(users) {
   });
 }
 
-function filterUsers() {
-  const searchInput = document.getElementById('search-input').value.toLowerCase();
-  const filteredUsers = window.usersData.filter(user =>
-    user.username.toLowerCase().includes(searchInput)
-  );
-  displayUsers(filteredUsers);
-}
-
 // Carrega os usuários ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
   fetchUsers();
