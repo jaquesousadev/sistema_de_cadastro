@@ -12,6 +12,7 @@ document.getElementById('register-client-form')?.addEventListener('submit', asyn
   const mes_reajuste = document.getElementById('mes_reajuste').value;
   const login_portal = document.getElementById('login_portal').value;
   const senha_portal = document.getElementById('senha_portal').value;
+  const cnpj_cliente = document.getElementById('cnpj_cliente').value;
   const plataforma = document.getElementById('plataforma').value;
 
   const response = await fetch('/clients/create', {
@@ -21,7 +22,7 @@ document.getElementById('register-client-form')?.addEventListener('submit', asyn
     },
     body: JSON.stringify({
       empresa, operadora, plano, apolice, valor, responsavel, phone, email,
-      senha_email, mes_reajuste, login_portal, senha_portal, plataforma
+      senha_email, mes_reajuste, login_portal, senha_portal, cnpj_cliente, plataforma
     })
   });
 
@@ -34,3 +35,20 @@ document.getElementById('register-client-form')?.addEventListener('submit', asyn
     alert('Falha no registro: ' + (result.message || 'Erro desconhecido'));
   }
 });
+
+$(document).ready(function(){
+  $("#valor").inputmask({
+      alias: 'currency',
+      prefix: 'R$ ',
+      autoUnmask: true,
+      removeMaskOnSubmit: true,
+      groupSeparator: '.',
+      radixPoint: ',',
+      digits: 2,
+      digitsOptional: false,
+      rightAlign: false,
+      unmaskAsNumber: true,
+      placeholder: '0'
+  });
+});
+

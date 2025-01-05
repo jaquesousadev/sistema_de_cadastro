@@ -72,12 +72,18 @@
         <div class="form-group col-md-6">
           <label for="senha_portal">Senha Portal Operadora:</label>
           <input type="text" id="senha_portal" name="senha_portal" required>
+        </div>        
+      </div> 
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="cnpj_cliente">CNPJ:</label>
+          <input type="text" class="form-control" id="cnpj_cliente" name="cnpj_cliente" required>
         </div>
         <div class="form-group col-md-6">
           <label for="plataforma">Plataforma:</label>
           <input type="text" class="form-control" id="plataforma" name="plataforma" required>
         </div>
-      </div> 
+      </div>
 
       <div class="form-group col-md-12 text-right">
         <button type="submit">Salvar</button>
@@ -85,6 +91,8 @@
       </div>
     </form>
   </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
   <script src="javascripts/edit_client.js"></script>
 </body>
 </html>

@@ -22,8 +22,12 @@ function displayClients(clients) {
     
     li.innerHTML = `
       <span class="client-info">
-        <strong>${client.empresa}</strong> - Operadora: ${client.operadora}, Mês Reajuste: ${client.mes_reajuste}, Login Portal Operadora: ${client.login_portal}, Senha Portal Operadora: ${client.senha_portal},
-        plataforma: ${client.plataforma} 
+        <strong>${client.empresa}</strong> - 
+        <strong>Operadora:</strong>${client.operadora}, 
+        <strong>Mês Reajuste:</strong> ${client.mes_reajuste}, 
+        <strong>Login Portal Operadora:</strong> ${client.login_portal}, 
+        <strong>Senha Portal Operadora:</strong> ${client.senha_portal}, 
+        <strong>plataforma:</strong> ${client.plataforma} 
       </span>
       <span class="client-actions">
         <button class="btn btn-sm btn-light" onclick="editClient(${client.id})">

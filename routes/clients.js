@@ -17,6 +17,7 @@ router.post('/create', (req, res) => {
     mes_reajuste: req.body.mes_reajuste,
     login_portal: req.body.login_portal,
     senha_portal: req.body.senha_portal,
+    cnpj_cliente: req.body.cnpj_cliente,
     plataforma: req.body.plataforma
   };
 
@@ -72,6 +73,7 @@ router.put('/:id', (req, res) => {
       mes_reajuste: req.body.mes_reajuste,
       login_portal: req.body.login_portal,
       senha_portal: req.body.senha_portal,
+      cnpj_cliente: req.body.cnpj_cliente,
       plataforma: req.body.plataforma
     };
 
