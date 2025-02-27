@@ -74,6 +74,9 @@ document.getElementById('edit-client-form').addEventListener('submit', async (ev
     senha_email, mes_reajuste, login_portal, senha_portal, cnpj_cliente, plataforma
   }); // Verificação
 
+  //Adicionando console.log para verificar se o cnpj está sendo capturado corretamente
+  console.log("CNPJ enviado:", cnpj_cliente);
+
   const response = await fetch(`/clients/${id}`, {
     method: 'PUT',
     headers: {
