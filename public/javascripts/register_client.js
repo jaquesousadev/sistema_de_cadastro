@@ -15,6 +15,9 @@ document.getElementById('register-client-form')?.addEventListener('submit', asyn
   const cnpj_cliente = document.getElementById('cnpj_cliente').value;
   const plataforma = document.getElementById('plataforma').value;
 
+  //Adicionando console.log para verificar se o cnpj está sendo capturado corretamente
+  console.log("CNPJ enviado:", cnpj_cliente);
+
   const response = await fetch('/clients/create', {
     method: 'POST',
     headers: {
