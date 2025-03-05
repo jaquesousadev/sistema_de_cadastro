@@ -110,6 +110,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+document.addEventListener("DOMContentLoaded", async function () {
+    carregarEmpresasReajuste();
+});
+
+async function carregarEmpresasReajuste() {
+    const cardEmpresas = document.getElementById("empresas-reajuste");
+    const mesAtual = new Date().getMonth() + 1; // Obtém o mês atual (1-12)
+
+    try {
+        const response = await fetch(`/dashboard/empresas-reajuste/${mesAtual}`);
+        const empresas = await response.json();
+
+        if (empresas.length > 0) {
+            let listaEmpresas = "<ul class='list-group'>";
+            empresas.forEach(empresa => {
+                listaEmpresas += `<li class='list-group-item'>${empresa.empresa}</li>`;
+            });
+            listaEmpresas += "</ul>";
+
+            cardEmpresas.innerHTML = listaEmpresas;
+        } else {
+            cardEmpresas.innerHTML = "<p class='text-muted'>Nenhuma empresa com reajuste neste mês.</p>";
+        }
+    } catch (error) {
+        console.error("Erro ao buscar empresas:", error);
+        cardEmpresas.innerHTML = "<p class='text-danger'>Erro ao carregar os dados.</p>";
+    }
+}
 
 
 //  Função de logout

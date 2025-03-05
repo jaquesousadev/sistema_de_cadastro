@@ -169,6 +169,7 @@ h1 {
   .card {
     width: 90%;
   }
+  
 }
 
 .card h3 {
@@ -180,3 +181,72 @@ h1 {
   font-size: 24px;
   font-weight: bold;
 }
+
+/* Melhorando a lista de empresas */
+.lista-empresas {
+  list-style: none; /* Remove os marcadores da lista */
+  padding: 0;
+  margin: 0;
+}
+
+.lista-empresas li {
+  background-color: #f8f9fa; /* Fundo leve para destacar cada item */
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Garantir que o card tenha um espaço adequado */
+.card {
+  min-width: 280px;
+}
+
+.card-body {
+  max-height: 250px; /* Limitar altura e permitir rolagem */
+  overflow-y: auto;
+}
+
+/* Estilo para o card maior */
+.card-reajuste {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Espaço acima do card */
+  width: 62%; /* Ocupa toda a largura do container */
+  text-align: center;
+}
+
+/* Ajusta o texto e conteúdo dentro do card */
+.card-reajuste h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.card-reajuste #empresas-reajuste {
+  max-height: 300px;
+  overflow-y: auto; /* Adiciona rolagem caso tenha muitos itens */
+  text-align: center;
+}
+
+.card-reajuste .lista-empresas li {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .card,
+  .card-reajuste {
+    width: 96%; /* Faz com que os cards ocupem 90% da largura em telas menores */
+    margin-bottom: 20px; /* Espaçamento entre os cards */
+  }
+}
+
+

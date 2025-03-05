@@ -39,4 +39,22 @@ router.get('/dashboard-data', async (req, res) => {
     }
 });
 
+// Rota para buscar empresas com reajuste no mês informado
+router.get('/empresas-reajuste/:mes', async (req, res) => {
+    try {
+        const mes = req.params.mes; // Obtém o mês da URL
+        const query = 'SELECT id, empresa FROM clients WHERE mes_reajuste = ?';
+        
+        db.query(query, [mes], (err, results) => {
+            if (err) {
+                console.error('Erro ao buscar empresas:', err);
+                return res.status(500).json({ error: 'Erro ao buscar empresas' });
+            }
+            res.json(results); // Retorna a lista de empresas
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+});
+
 module.exports = router;
