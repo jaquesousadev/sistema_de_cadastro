@@ -1,133 +1,182 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Layout principal */
 body {
-    background-color: #ffffff;
-    color: #000;
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  background-color: #f4f4f4;
 }
-  
-.dashboard-container {
-    display: flex;
-    flex-direction: column; /* Título e botões em coluna */
-    justify-content: flex-start; /* Inicia o conteúdo no topo */
-    align-items: center; /* Centraliza os itens horizontalmente */
-    height: 100vh; /* Garante que ocupe a altura total da tela */
-    text-align: center;
-    padding-top: 100px; /* Ajuste para dar espaço do topo */
+
+/* ======== MENU LATERAL ======== */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 250px;
+  height: 100vh;
+  background: #02022a;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0px;
+  z-index: 1000; /* Mantém o menu sobre outros elementos */
+  transition: transform 0.3s ease-in-out;
 }
-  
+
+/* Quando o menu está fechado no mobile */
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* Oculta o menu lateral em telas menores */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Botão para abrir o menu no mobile */
+.menu-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #02022a;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1100; /* Mantém o botão acima do menu */
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+}
+
+.sidebar h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+  padding-top: 40px; /* Garante espaço suficiente na parte superior */
+  white-space: nowrap; /* Evita que o texto quebre */
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 15px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar ul li i {
+  margin-right: 10px;
+}
+
+.sidebar ul li:hover {
+  background: #140354;
+  cursor: pointer;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 10px;
+  background: #E63946;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+.logout-button:hover {
+  background: #C71F29;
+}
+
+/* ======== CONTEÚDO PRINCIPAL ======== */
+.main-content {
+  margin-left: 270px; /* Para não sobrepor o menu */
+  padding: 30px;
+  width: 100%;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Quando o menu estiver fechado */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding-top: 80px; /* Aumente se necessário */
+  }
+
+  .main-content h1 {
+    margin-top: 20px; /* Garante que o título não fique grudado no topo */
+  }
+}
+
+
 h1 {
-    font-size: 2rem;
-    margin-bottom: 80px; /* Espaçamento entre título e botões */
-    font-weight: bold;
+  font-size: 28px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 10; /* Garante que fique acima do menu */
 }
-  
-.button-container, .button-container-secondary {
-    display: flex; /* Organiza os botões horizontalmente */
-    justify-content: center; /* Centraliza os botões */
-    align-items: center; /* Alinha os botões verticalmente */
-    gap: 20px; /* Espaçamento entre os botões */
-    padding: 20px;
+
+/* ======== CARDS DE INFORMAÇÕES ======== */
+.cards-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
-  
-  button {
-    width: 200px; /* Largura fixa para todos os botões */
-    height: 200px; /* Altura fixa para todos os botões */
-    background: none; /* Remove o fundo */
-    border: none; /* Remove a borda */
-    text-decoration: none; /* Remove o sublinhado */
-    color: white; /* Altere para a cor desejada */
-    cursor: pointer; /* Adiciona o ponteiro para indicar que é clicável */
-    display: flex;
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  text-align: center;
+}
+
+/* Em telas menores, os cards ocupam 100% da largura */
+@media (max-width: 600px) {
+  .cards-container {
     flex-direction: column;
     align-items: center;
-    padding: 10px 20px; /* Adiciona mais espaçamento interno aos botões */
-    font-size: 14px;
-    transition: all 0.3s ease; /* Transição suave para o efeito de hover */
   }
 
-  /* Estilo para o texto (span) dentro do botão */
-button span {
-    display: inline-block; /* Permite a aplicação de borda no texto */
-    padding: 5px 10px; /* Adiciona espaçamento ao redor do texto */
-    border: 2px solid #0056b3; /* Borda preta em torno do texto */
-    border-radius: 5px; /* Bordas arredondadas */
-    background-color: #0056b3; /* Cor de fundo inicial (cor clara) */
-    transition: background-color 0.3s ease; /* Transição suave para a mudança de cor de fundo */
+  .card {
+    width: 90%;
+  }
 }
 
-  
-  button:hover {
-    color: black; /* Efeito de hover - muda a cor */
-    transform: translateY(-5px); /* Move o botão para cima ao passar o mouse */
-    
-  }
-  
-  button img {
-    width: 100px; /* Ajuste o tamanho do ícone */
-    height: 100px;
-    margin-bottom: 5px;
-  }
-  
-  .logout-button {
-    width: 80px; /* Largura fixa para todos os botões */
-    height: 80px; /* Altura fixa para todos os botões */
-    position: absolute;
-    top: 10px; /* Distância do topo */
-    right: 10px; /* Distância da direita */
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #ffffff;
-    background-color: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
 
-  .logout-button img {
-    width: 50px; /* Ajuste o tamanho do ícone */
-    height: 50px;
-    margin-bottom: 5px;
-  }
-
-    
-  .logout-button:hover {
-    color: red; /* Efeito de hover - muda a cor */ 
-    background-color: #ffffff;
-    transform: none;
-    box-shadow: none;
-    
-  }
-
-  @media screen and (max-width: 1086px){
-    .dashboard-container {
-    padding: 20px; 
-    }
-
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 30px;
-      padding: 80px;
-    }
-
-    .button-container {
-      gap: 0px;
-    }
-
-    button {
-      max-width: 150px;
-      font-size: 12px;
-      padding: 5px 10px;
-    }
-
-    button img {
-      width: 40px;
-      height: 40px;
-    }
-
-    .logout-button {
-      right: 5px;
-    }
-
-  }
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+}

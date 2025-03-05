@@ -6,41 +6,44 @@
   <title>Dashboard</title>
   <link rel="icon" type="image/png" href="./images/logojalves.png">
   <link rel="stylesheet" href="stylesheets/dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 </head>
 <body>
-  <div class="dashboard-container">
-    <h1>Bem-vindo ao Dashboard</h1>
-    <div class="button-container">
-        <button onclick="window.location.href='register_client.html'">
-          <img src="icons/user.png" alt="Cadastro de Clientes">
-          <span>Cadastro de Clientes</span>
-        </button>
-        <button onclick="window.location.href='list_clients.html'">
-          <img src="icons/age-alt.png" alt="Lista de Clientes">
-          <span>Lista de Clientes</span>
-        </button>
-        <button onclick="window.location.href='list_users.html'">
-          <img src="icons/admin-alt.png" alt="Lista de Usuários">
-          <span>Lista de Usuários</span>
-        </button>         
-    </div>
-    <div class="button-container-secondary">
-      <button onclick="window.location.href='https://dashboard-simp.agencialink.com.br/login'">
-        <img src="icons/agencialink.jpg" alt="logo-agencialink">
-        <span>Cotador Agencialink</span>
-      </button> 
-      <button onclick="window.location.href='https://mybro.com.br/area-do-corretor/#'">
-        <img src="icons/logo_mybro-02.png" alt="logo-mybro">
-        <span>Cotador Mybro</span>
-      </button>      
-    </div>
-    
-
+  <!-- Menu Lateral -->
+  <div class="sidebar">
+    <h2>Dashboard</h2>
+    <ul>
+        <li><a href="register_client.html"><i class="fas fa-user-plus"></i> Cadastro de Clientes</a></li>
+        <li><a href="list_clients.html"><i class="fas fa-users"></i> Lista de Clientes</a></li>
+        <li><a href="list_users.html"><i class="fas fa-user-cog"></i> Lista de Usuários</a></li>
+        <li><a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+    </ul>
     <button class="logout-button" onclick="logout()">
-      <img src="icons/logout.png" alt="logout">
-      <span>Sair</span>
+      <i class="fas fa-sign-out-alt"></i> Sair
     </button>
   </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    <h1>Bem-vindo ao Dashboard</h1>
+
+    <!-- Cards de Informações -->
+    <div class="cards-container">
+      <div class="card">
+        <div class="card2">
+          <h3>Clientes Cadastrados</h3>
+          <p id="totalClientes">0</p>
+        </div>
+        
+      </div>
+      <div class="card">
+        <h3>Clientes Vencendo Hoje</h3>
+        <p id="clientesVencendo">0</p>
+      </div>
+    </div>
+  </div>
+
   <script src="javascripts/dashboard.js"></script>
 </body>
 </html>

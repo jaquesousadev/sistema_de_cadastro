@@ -71,5 +71,24 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Verifica se está na página do dashboard antes de buscar os dados
+      if (window.location.pathname.includes('dashboard.html')) {
+        try {
+          const response = await fetch('http://localhost:3002/dashboard/dashboard-data');
+          if (!response.ok) throw new Error('Erro ao buscar os dados do dashboard');
+    
+          const data = await response.json();
+    
+          // Atualiza os valores nos cards do dashboard
+          document.getElementById('totalClientes').textContent = data.totalClientes;
+          document.getElementById('clientesVencendo').textContent = data.clientesVencendo;
+        } catch (error) {
+          console.error('Erro ao carregar os dados do dashboard:', error);
+        }
+      }
+    });
+    
+
   });
   

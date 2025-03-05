@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     $("#valor").val(client.valor || '');
     
     document.getElementById('responsavel').value = client.responsavel || '';
+    document.getElementById('vencimento').value = client.vencimento ||'';
+    document.getElementById('vidas').value = client.vidas ||'';
     document.getElementById('phone').value = client.phone || '';
     document.getElementById('email').value = client.email || '';
     document.getElementById('senha_email').value = client.senha_email || '';
@@ -60,6 +62,8 @@ document.getElementById('edit-client-form').addEventListener('submit', async (ev
   const apolice = document.getElementById('apolice').value;
   const valor = $("#valor").inputmask('unmaskedvalue');
   const responsavel = document.getElementById('responsavel').value;
+  const vencimento = document.getElementById('vencimento').value;
+  const vidas = document.getElementById('vidas').value;
   const phone = document.getElementById('phone').value;
   const email = document.getElementById('email').value;
   const senha_email = document.getElementById('senha_email').value;
@@ -70,7 +74,7 @@ document.getElementById('edit-client-form').addEventListener('submit', async (ev
   const plataforma = document.getElementById('plataforma').value;
 
   console.log('Dados do cliente:', {
-    empresa, operadora, plano, apolice, valor, responsavel, phone, email,
+    empresa, operadora, plano, apolice, valor, responsavel, vencimento, vidas, phone, email,
     senha_email, mes_reajuste, login_portal, senha_portal, cnpj_cliente, plataforma
   }); // Verificação
 
@@ -83,7 +87,7 @@ document.getElementById('edit-client-form').addEventListener('submit', async (ev
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      empresa, operadora, plano, apolice, valor, responsavel, phone, email,
+      empresa, operadora, plano, apolice, valor, responsavel, vencimento, vidas, phone, email,
       senha_email, mes_reajuste, login_portal, senha_portal, cnpj_cliente, plataforma
     })
   });

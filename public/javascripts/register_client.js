@@ -6,6 +6,8 @@ document.getElementById('register-client-form')?.addEventListener('submit', asyn
   const apolice = document.getElementById('apolice').value;
   const valor = document.getElementById('valor').value;
   const responsavel = document.getElementById('responsavel').value;
+  const vencimento = document.getElementById('vencimento').value;
+  const vidas = document.getElementById('vidas').value;
   const phone = document.getElementById('phone').value;
   const email = document.getElementById('email').value;
   const senha_email = document.getElementById('senha_email').value;
@@ -24,7 +26,7 @@ document.getElementById('register-client-form')?.addEventListener('submit', asyn
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      empresa, operadora, plano, apolice, valor, responsavel, phone, email,
+      empresa, operadora, plano, apolice, valor, responsavel, vencimento, vidas, phone, email,
       senha_email, mes_reajuste, login_portal, senha_portal, cnpj_cliente, plataforma
     })
   });

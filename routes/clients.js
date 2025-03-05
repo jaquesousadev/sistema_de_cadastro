@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Client = require('../models/clientModel');
+const db = require("../config/db"); // Importa a conexão com o banco de dados
+
 
 // Rota para registrar clientes
 router.post('/create', (req, res) => {
@@ -11,6 +13,8 @@ router.post('/create', (req, res) => {
     apolice: req.body.apolice,
     valor: req.body.valor,
     responsavel: req.body.responsavel,
+    vencimento: req.body.vencimento,
+    vidas: req.body.vidas,
     phone: req.body.phone,
     email: req.body.email,
     senha_email: req.body.senha_email,
@@ -67,6 +71,8 @@ router.put('/:id', (req, res) => {
       apolice: req.body.apolice,
       valor: req.body.valor,
       responsavel: req.body.responsavel,
+      vencimento: req.body.vencimento,
+      vidas: req.body.vidas,
       phone: req.body.phone,
       email: req.body.email,
       senha_email: req.body.senha_email,
@@ -100,6 +106,25 @@ router.delete('/:id', (req, res) => {
     });
   });
   
+  // Rota para obter os dados do dashboard
+router.get('/dashboard-data', async (req, res) => {
+  try {
+      // Consulta total de clientes
+      const [clientes] = await db.execute('SELECT COUNT(*) AS total FROM clients');
+      
+      // Consulta clientes com boletos vencendo hoje
+      const hoje = new Date().toISOString().split('T')[0];
+      const [clientesVencendo] = await db.execute('SELECT COUNT(*) AS vencendo FROM clients WHERE vencimento = ?', [hoje]);
+
+      res.json({
+          totalClientes: clientes[0].total,
+          clientesVencendo: clientesVencendo[0].vencendo
+      });
+  } catch (error) {
+      console.error("Erro ao buscar dados do dashboard:", error);
+      res.status(500).json({ error: "Erro ao buscar dados." });
+  }
+});
   
   
   

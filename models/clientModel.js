@@ -3,14 +3,15 @@ const db = require('../config/db');
 class Client {
   static create(client, callback) {
     const query = `
-      INSERT INTO clients (empresa, operadora, plano, apolice, valor, responsavel, phone, email,
+      INSERT INTO clients (empresa, operadora, plano, apolice, valor, responsavel, vencimento, vidas, phone, email,
         senha_email, mes_reajuste, login_portal, senha_portal, cnpj_cliente, plataforma)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     console.log("Query para criar cliente:", query); // Log da query
     db.query(query, [
-      client.empresa, client.operadora, client.plano, client.apolice, client.valor, client.responsavel, client.phone, client.email,
-      client.senha_email, client.mes_reajuste, client.login_portal, client.senha_portal, client.cnpj_cliente, client.plataforma
+      client.empresa, client.operadora, client.plano, client.apolice, client.valor, client.responsavel, client.vencimento, client.vidas,
+      client.phone, client.email, client.senha_email, client.mes_reajuste, client.login_portal, client.senha_portal, client.cnpj_cliente, 
+      client.plataforma
     ], (err,result) => {
       if (err) {
         console.error("Erro ao criar cliente:", err); // Log de erro
@@ -47,13 +48,15 @@ class Client {
 
   static updateById(id, client, callback) {
     const query = `
-      UPDATE clients SET empresa = ?, operadora = ?, plano = ?, apolice = ?, valor = ?, responsavel = ?, phone = ?, email = ?,
-        senha_email = ?, mes_reajuste = ?, login_portal = ?, senha_portal = ?, cnpj_cliente= ?, plataforma = ? WHERE id = ?
+      UPDATE clients SET empresa = ?, operadora = ?, plano = ?, apolice = ?, valor = ?, responsavel = ?, vencimento = ?, vidas = ?,
+       phone = ?, email = ?, senha_email = ?, mes_reajuste = ?, login_portal = ?, senha_portal = ?, cnpj_cliente= ?, plataforma = ?
+       WHERE id = ?
     `;
     console.log("Query para atualizar cliente:", query); // Log da query
     db.query(query, [
-      client.empresa, client.operadora, client.plano, client.apolice, client.valor, client.responsavel, client.phone, client.email,
-      client.senha_email, client.mes_reajuste, client.login_portal, client.senha_portal, client.cnpj_cliente, client.plataforma, id
+      client.empresa, client.operadora, client.plano, client.apolice, client.valor, client.responsavel, client.vencimento, client.vidas,
+      client.phone, client.email, client.senha_email, client.mes_reajuste, client.login_portal, client.senha_portal, client.cnpj_cliente, 
+      client.plataforma, id
     ], (err, result) => {
       if (err) {
         console.error("Erro ao atualizar cliente", err); // Log de erro
