@@ -1,59 +1,139 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
-  <link rel="icon" type="image/png" href="./images/logojalves.png">
-  <link rel="stylesheet" href="stylesheets/dashboard.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
+  <link rel="icon" type="image/png" href="./images/logojalves.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
-<body>
-  <!-- Menu Lateral -->
-  <div class="sidebar">
-    <h2>Dashboard</h2>
-    <ul>
-        <li><a href="register_client.html"><i class="fas fa-user-plus"></i> Cadastro de Clientes</a></li>
-        <li><a href="list_clients.html"><i class="fas fa-users"></i> Lista de Clientes</a></li>
-        <li><a href="list_users.html"><i class="fas fa-user-cog"></i> Lista de Usuários</a></li>
-        <li><a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+<body class="bg-gray-100 overflow-x-hidden">
+
+  <!-- Botão de menu (visível apenas no mobile) -->
+  <button
+    class="menu-toggle fixed top-4 left-4 z-50 bg-indigo-900 text-white p-2 rounded-md md:hidden"
+    onclick="toggleSidebar()"
+    title="Abrir menu"
+    aria-label="Abrir menu"
+  >
+    <i class="fas fa-bars"></i>
+    <span class="sr-only">Abrir menu</span>
+  </button>
+
+  <!-- Overlay escuro para mobile -->
+  <div
+    id="sidebarOverlay"
+    class="fixed inset-0 bg-black bg-opacity-40 hidden z-40 md:hidden"
+    onclick="toggleSidebar()"
+  ></div>
+
+  <!-- Sidebar responsiva -->
+  <aside class="sidebar
+    bg-indigo-900 text-white p-6
+    h-screen w-64 z-50
+    transition-transform duration-300
+    md:fixed md:top-0 md:left-0
+    md:translate-x-0
+    fixed top-0 left-0 transform -translate-x-full
+    md:block
+  ">
+    <h2 class="text-2xl font-bold mb-8">Menu</h2>
+    <ul class="space-y-4">
+      <li>
+        <a href="register_client.html" class="flex items-center hover:bg-indigo-700 p-2 rounded">
+          <i class="fas fa-user-plus mr-2"></i> Cadastro de Clientes
+        </a>
+      </li>
+      <li>
+        <a href="list_clients.html" class="flex items-center hover:bg-indigo-700 p-2 rounded">
+          <i class="fas fa-users mr-2"></i> Lista de Clientes
+        </a>
+      </li>
+      <li>
+        <a href="list_users.html" class="flex items-center hover:bg-indigo-700 p-2 rounded">
+          <i class="fas fa-user-cog mr-2"></i> Lista de Usuários
+        </a>
+      </li>
+      <li>
+        <a href="#" class="flex items-center hover:bg-indigo-700 p-2 rounded">
+          <i class="fas fa-chart-bar mr-2"></i> Relatórios
+        </a>
+      </li>
     </ul>
-    <button class="logout-button" onclick="logout()">
-      <i class="fas fa-sign-out-alt"></i> Sair
+    <button
+      onclick="logout()"
+      class="mt-10 bg-red-600 hover:bg-red-700 px-4 py-2 rounded w-full flex items-center justify-center"
+    >
+      <i class="fas fa-sign-out-alt mr-2"></i> Sair
     </button>
-  </div>
+  </aside>
 
-  <!-- Conteúdo Principal -->
-  <div class="main-content">
-    <h1>Bem-vindo ao Dashboard</h1>
+  <!-- Conteúdo principal -->
+  <main class="main-content p-6 pt-20 md:pt-6 transition-all md:ml-64">
+    <h1 class="text-3xl font-bold mb-6">Bem-vindo ao Dashboard</h1>
 
-    <!-- Cards de Informações -->
-    <div class="cards-container">
-      <div class="card">
-        <div class="card2">
-          <h3>Clientes Cadastrados</h3>
-          <p id="totalClientes">0</p>
-        </div>        
+    <!-- Cards de informações -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-gray-600">Clientes Cadastrados</h3>
+        <p id="totalClientes" class="text-3xl font-bold text-indigo-700">0</p>
       </div>
-      <div class="card">
-        <h3>Clientes Vencendo Hoje</h3>
-        <p id="clientesVencendo">0</p>
-      </div>    
-
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-gray-600">Clientes Vencendo Hoje</h3>
+        <p id="clientesVencendo" class="text-3xl font-bold text-red-600">0</p>
+      </div>
+      <div class="bg-white shadow rounded-lg p-6 text-center col-span-1 sm:col-span-2">
+        <h3 class="text-gray-600">Reajuste no Mês</h3>
+        <div id="empresas-reajuste" class="text-lg text-gray-800 mt-2">Nenhum reajuste encontrado</div>
+      </div>
     </div>
 
-    <!-- Card maior para Reajuste no Mês -->
-<div class="card-reajuste" id="empresasReajuste">
-  <h3>Reajuste no Mês</h3>
-  <div id="empresas-reajuste"></div>
-    
-  </div>
+    <!-- Gráfico -->
+    <div class="bg-white shadow rounded-lg p-6">
+      <h3 class="text-lg font-semibold mb-4">Evolução de Clientes por Mês</h3>
+      <canvas id="graficoClientes"></canvas>
+    </div>
+  </main>
 
-  
-</div>
-
-
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="javascripts/dashboard.js"></script>
+  <script>
+    const ctx = document.getElementById('graficoClientes').getContext('2d');
+    const grafico = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+        datasets: [{
+          label: 'Clientes cadastrados',
+          data: [5, 10, 8, 12, 20, 15],
+          backgroundColor: '#4f46e5'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  </script>
+
+  <!-- JS para abrir/fechar sidebar -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+      document.body.classList.toggle('overflow-hidden');
+    }
+
+    function logout() {
+      alert("Você saiu do sistema!");
+      window.location.href = "index.html";
+    }
+  </script>
 </body>
 </html>

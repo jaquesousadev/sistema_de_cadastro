@@ -74,41 +74,6 @@ async function verificarBoletosVencendo() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    let menuToggle = document.querySelector(".menu-toggle");
-
-    // Se o botão de menu não existir, cria um novo
-    if (!menuToggle) {
-        menuToggle = document.createElement("button");
-        menuToggle.className = "menu-toggle";
-        menuToggle.textContent = "☰ Menu";
-        document.body.appendChild(menuToggle);
-    }
-
-    const sidebar = document.querySelector(".sidebar");
-    const mainContent = document.querySelector(".main-content");
-
-    menuToggle.addEventListener("click", function () {
-        sidebar.classList.toggle("open");
-
-        // Ajusta a margem do conteúdo ao abrir/fechar o menu
-        if (sidebar.classList.contains("open")) {
-            mainContent.style.marginLeft = "250px"; // Mesmo tamanho da sidebar
-        } else {
-            mainContent.style.marginLeft = "0";
-        }
-    });
-
-    // Garante que o menu feche automaticamente ao redimensionar a tela
-    window.addEventListener("resize", function () {
-        if (window.innerWidth > 768) {
-            sidebar.classList.remove("open");
-            mainContent.style.marginLeft = "270px"; // Valor normal para telas grandes
-        } else {
-            mainContent.style.marginLeft = "0";
-        }
-    });
-});
 
 document.addEventListener("DOMContentLoaded", async function () {
     carregarEmpresasReajuste();
@@ -138,6 +103,16 @@ async function carregarEmpresasReajuste() {
         cardEmpresas.innerHTML = "<p class='text-danger'>Erro ao carregar os dados.</p>";
     }
 }
+
+function toggleSidebar() {
+  const sidebar = document.querySelector(".sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+
+  sidebar.classList.toggle("-translate-x-full"); // mostra/esconde a sidebar
+  overlay.classList.toggle("hidden");            // mostra/esconde o fundo escuro
+  document.body.classList.toggle("overflow-hidden"); // bloqueia scroll no mobile
+}
+
 
 
 //  Função de logout
