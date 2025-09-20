@@ -1,45 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lista de Clientes</title>
-  <link rel="icon" type="image/png" href="./images/logojalves.png">
-  <link rel="stylesheet" href="stylesheets/list_clients.css">
-  <!-- Link do Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Link do Bootstrap para facilitar (opcional) -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-</head>
-<body>
-  <div class="list-clients-container">
-    <!-- Botão de voltar -->
-    <div class="top-bar">
-      <button class="btn btn-light back-button" onclick="window.location.href = 'dashboard.html';">
-        <i class="fas fa-arrow-left"></i> Voltar
-      </button>
-    </div>
-    <!-- Título da página -->
-    <h1>Lista de Clientes</h1>
-
-    <!-- Barra de pesquisa -->
-    <div class="search-bar">
-      <input type="text" id="search-input" class="form-control" placeholder="Digite o nome da empresa">
-      <button class="btn btn-primary" id="search-button">Pesquisar</button>
-    </div>
-
-    <!-- Lista de clientes -->
-    <div id="client-list" class="client-card-list"></div>
-  </div>
+  <link rel="icon" type="image/png" href="./images/logojalves.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-
-    // Função para voltar para a página anterior
-    function goBack() {
-      window.history.back();
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            roboto: ['Roboto', 'sans-serif'],
+          }
+        }
+      }
     }
   </script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+</head>
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-roboto transition-colors duration-300">
+
+  <div class="max-w-7xl mx-auto px-4 py-6">
+    
+    <!-- Top bar -->
+    <div class="flex items-center justify-between mb-6">
+      <button onclick="window.location.href = 'dashboard.html'" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-indigo-600">
+        <i class="fas fa-arrow-left"></i> Voltar
+      </button>
+
+      <button onclick="document.documentElement.classList.toggle('dark')" class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+        Alternar Tema 🌗
+      </button>
+    </div>
+
+    <!-- Título -->
+    <h1 class="text-2xl font-bold mb-4">Lista de Clientes</h1>
+
+    <!-- Barra de pesquisa -->
+    <div class="flex gap-2 mb-6">
+      <input type="text" id="search-input" placeholder="Digite o nome da empresa" class="flex-1 px-4 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm">
+      <button id="search-button" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm">Pesquisar</button>
+    </div>
+
+    <!-- Filtros (opcional) -->
+    <div class="flex flex-wrap gap-2 mb-6">
+      <!-- Filtros dinâmicos podem ser inseridos aqui via JS -->
+    </div>
+
+    <!-- Lista de clientes gerada dinamicamente -->
+    <div id="client-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Os cards serão inseridos aqui via list_clients.js -->
+    </div>
+  </div>
   
   <script src="javascripts/list_clients.js"></script>
 </body>

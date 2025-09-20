@@ -14,32 +14,30 @@ async function fetchClients() {
 function displayClients(clients) {
   const clientList = document.getElementById('client-list');
   clientList.innerHTML = ''; // Limpa a lista existente
-  
+
   clients.forEach(client => {
-    // Cria o item da lista
-    const li = document.createElement('li');
-    li.className = 'client-item'; // Classe para estilização da lista
-    
-    li.innerHTML = `
-      <span class="client-info">
-        <strong>${client.empresa}</strong> - 
-        <strong>Operadora:</strong>${client.operadora}, 
-        <strong>Mês Reajuste:</strong> ${client.mes_reajuste}, 
-        <strong>Login Portal Operadora:</strong> ${client.login_portal}, 
-        <strong>Senha Portal Operadora:</strong> ${client.senha_portal}, 
-        <strong>plataforma:</strong> ${client.plataforma} 
-      </span>
-      <span class="client-actions">
-        <button class="btn btn-sm btn-light" onclick="editClient(${client.id})">
-          <i class="fas fa-pencil-alt"></i>
+    const card = document.createElement('div');
+    card.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition';
+
+    card.innerHTML = `
+      <div class="mb-2 font-semibold text-lg">${client.empresa}</div>
+      <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Responsável:</strong> ${client.responsavel || '—'}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Operadora:</strong> ${client.operadora}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Mês Reajuste:</strong> ${client.mes_reajuste}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Login Portal:</strong> ${client.login_portal}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Senha Portal:</strong> ${client.senha_portal}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Plataforma:</strong> ${client.plataforma}</p>
+      <div class="mt-4 flex justify-between">
+        <button class="text-blue-600 hover:text-blue-800 text-sm" onclick="editClient(${client.id})">
+          <i class="fas fa-edit"></i> Editar
         </button>
-        <button class="btn btn-sm btn-danger" onclick="deleteClient(${client.id})">
-          <i class="fas fa-trash-alt"></i>
+        <button class="text-red-600 hover:text-red-800 text-sm" onclick="deleteClient(${client.id})">
+          <i class="fas fa-trash-alt"></i> Excluir
         </button>
-      </span>
+      </div>
     `;
-    
-    clientList.appendChild(li); // Adiciona o item à lista
+
+    clientList.appendChild(card);
   });
 }
 
