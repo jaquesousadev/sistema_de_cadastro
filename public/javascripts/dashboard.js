@@ -1,122 +1,202 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    await carregarDadosDashboard(); // Busca os dados assim que a página carregar
-    await verificarBoletosVencendo(); // Verifica boletos vencendo ao carregar a página
+document.addEventListener("DOMContentLoaded", () => {
+  configurarMenu();
+  configurarLogout();
+  preencherMesAtual();
+  iniciarGraficoClientes();
+  carregarDashboard();
 });
 
-//  Busca dados reais do banco de dados e exibe no dashboard
-async function carregarDadosDashboard() {
-    try {
-        const response = await fetch('dashboard/dashboard-data');
-        if (!response.ok) throw new Error("Erro ao buscar dados do dashboard.");
-        
-        const data = await response.json();
-        console.log("📊 Dados recebidos:", data);
-
-        const totalClientesElem = document.getElementById("totalClientes");
-        const clientesVencendoElem = document.getElementById("clientesVencendo");
-
-        if (!totalClientesElem || !clientesVencendoElem) {
-            console.error("❌ Elementos HTML não encontrados!");
-            return;
-        }
-
-        totalClientesElem.textContent = data.totalClientes;
-        clientesVencendoElem.textContent = data.clientesVencendo;
-
-        console.log("✅ Dashboard atualizado!");
-    } catch (error) {
-        console.error("❌ Erro ao carregar os dados do dashboard:", error);
-    }
-}
-
-
-//  Verifica clientes com boletos vencendo hoje
-async function verificarBoletosVencendo() {
-    try {
-        const response = await fetch('/clients'); // Chama a API que retorna os clientes
-        if (!response.ok) throw new Error("Erro ao buscar clientes.");
-
-        const data = await response.json();
-        console.log("Clientes recebidos:", data);
-
-        const clients = data?.clients;
-        if (!Array.isArray(clients)) throw new Error("A resposta da API não contém uma lista de clientes.");
-
-        const hoje = new Date();
-        const diaHoje = hoje.getDate().toString().padStart(2, '0'); // Formata para "01", "02", etc.
-
-        let boletosVencendo = [];
-
-        clients.forEach(cliente => {
-            const vencimento = cliente.vencimento.toString().padStart(2, '0'); // Formata corretamente
-
-            if (vencimento === diaHoje) {
-                boletosVencendo.push(cliente.empresa);
-            }
-        });
-
-        // Atualiza o número de clientes com boletos vencendo no dashboard
-        const clientesVencendoElem = document.getElementById("clientesVencendo");
-        if (clientesVencendoElem) {
-            clientesVencendoElem.textContent = boletosVencendo.length; // Define a quantidade correta
-        } else {
-            console.error("❌ Elemento clientesVencendo não encontrado!");
-        }
-
-        // Exibe alerta apenas se houver boletos vencendo
-        if (boletosVencendo.length > 0) {
-            alert("Boletos vencendo hoje:\n" + boletosVencendo.join("\n"));
-        } else {
-            console.log("Nenhum boleto vence hoje.");
-        }
-    } catch (error) {
-        console.error("Erro ao verificar boletos vencendo:", error);
-    }
-}
-
-
-document.addEventListener("DOMContentLoaded", async function () {
-    carregarEmpresasReajuste();
-});
-
-async function carregarEmpresasReajuste() {
-    const cardEmpresas = document.getElementById("empresas-reajuste");
-    const mesAtual = new Date().getMonth() + 1; // Obtém o mês atual (1-12)
-
-    try {
-        const response = await fetch(`/dashboard/empresas-reajuste/${mesAtual}`);
-        const empresas = await response.json();
-
-        if (empresas.length > 0) {
-            let listaEmpresas = "<ul class='list-group'>";
-            empresas.forEach(empresa => {
-                listaEmpresas += `<li class='list-group-item'>${empresa.empresa}</li>`;
-            });
-            listaEmpresas += "</ul>";
-
-            cardEmpresas.innerHTML = listaEmpresas;
-        } else {
-            cardEmpresas.innerHTML = "<p class='text-muted'>Nenhuma empresa com reajuste neste mês.</p>";
-        }
-    } catch (error) {
-        console.error("Erro ao buscar empresas:", error);
-        cardEmpresas.innerHTML = "<p class='text-danger'>Erro ao carregar os dados.</p>";
-    }
-}
-
-function toggleSidebar() {
-  const sidebar = document.querySelector(".sidebar");
+function configurarMenu() {
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebarOverlay");
 
-  sidebar.classList.toggle("-translate-x-full"); // mostra/esconde a sidebar
-  overlay.classList.toggle("hidden");            // mostra/esconde o fundo escuro
-  document.body.classList.toggle("overflow-hidden"); // bloqueia scroll no mobile
+  if (!menuToggle || !sidebar || !overlay) return;
+
+  const fecharMenu = () => {
+    sidebar.classList.add("-translate-x-full");
+    overlay.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  };
+
+  const alternarMenu = () => {
+    sidebar.classList.toggle("-translate-x-full");
+    overlay.classList.toggle("hidden");
+    document.body.classList.toggle("overflow-hidden");
+  };
+
+  menuToggle.addEventListener("click", alternarMenu);
+  overlay.addEventListener("click", fecharMenu);
+
+  sidebar.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", fecharMenu);
+  });
 }
 
+function configurarLogout() {
+  const logoutButton = document.getElementById("logoutButton");
+  if (!logoutButton) return;
 
-
-//  Função de logout
-function logout() {
-    alert("Você saiu do sistema!");
+  logoutButton.addEventListener("click", () => {
     window.location.href = "index.html";
+  });
+}
+
+async function carregarDashboard() {
+  await carregarDadosDashboard();
+  await verificarBoletosVencendo();
+  await carregarEmpresasReajuste();
+}
+
+async function carregarDadosDashboard() {
+  try {
+    const response = await fetch("dashboard/dashboard-data");
+    if (!response.ok) throw new Error("Erro ao buscar dados do dashboard.");
+
+    const data = await response.json();
+
+    atualizarTexto("totalClientes", data.totalClientes ?? 0);
+    atualizarTexto("clientesVencendo", data.clientesVencendo ?? 0);
+  } catch (error) {
+    console.error("Erro ao carregar os dados do dashboard:", error);
+  }
+}
+
+async function verificarBoletosVencendo() {
+  try {
+    const response = await fetch("/clients");
+    if (!response.ok) throw new Error("Erro ao buscar clientes.");
+
+    const data = await response.json();
+    const clients = data?.clients;
+    if (!Array.isArray(clients)) throw new Error("A resposta da API não contém uma lista de clientes.");
+
+    const diaHoje = String(new Date().getDate()).padStart(2, "0");
+    const boletosVencendo = clients.filter((cliente) => {
+      return String(cliente.vencimento).padStart(2, "0") === diaHoje;
+    });
+
+    atualizarTexto("clientesVencendo", boletosVencendo.length);
+    atualizarPainelAlerta(boletosVencendo);
+  } catch (error) {
+    console.error("Erro ao verificar boletos vencendo:", error);
+  }
+}
+
+async function carregarEmpresasReajuste() {
+  const cardEmpresas = document.getElementById("empresas-reajuste");
+  if (!cardEmpresas) return;
+
+  const mesAtual = new Date().getMonth() + 1;
+
+  try {
+    const response = await fetch(`/dashboard/empresas-reajuste/${mesAtual}`);
+    if (!response.ok) throw new Error("Erro ao buscar empresas com reajuste.");
+
+    const empresas = await response.json();
+    const lista = Array.isArray(empresas) ? empresas : [];
+
+    atualizarTexto("totalReajustes", lista.length);
+
+    if (lista.length === 0) {
+      cardEmpresas.innerHTML = `
+        <div class="flex items-center gap-3 rounded-lg bg-white p-4 text-slate-500">
+          <i class="fas fa-circle-check text-emerald-600"></i>
+          Nenhuma empresa com reajuste neste mês.
+        </div>
+      `;
+      return;
+    }
+
+    cardEmpresas.innerHTML = `
+      <ul class="space-y-2">
+        ${lista.map((empresa) => `
+          <li class="flex items-start justify-between gap-3 rounded-lg bg-white px-3 py-3 text-slate-700 shadow-sm">
+            <span class="min-w-0 flex-1 break-words font-medium leading-snug">${empresa.empresa}</span>
+            <span class="shrink-0 rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">Reajuste</span>
+          </li>
+        `).join("")}
+      </ul>
+    `;
+  } catch (error) {
+    console.error("Erro ao buscar empresas:", error);
+    atualizarTexto("totalReajustes", 0);
+    cardEmpresas.innerHTML = `
+      <div class="rounded-lg bg-rose-50 p-4 text-rose-700">
+        Erro ao carregar os dados de reajuste.
+      </div>
+    `;
+  }
+}
+
+function atualizarPainelAlerta(boletosVencendo) {
+  const alertPanel = document.getElementById("alertPanel");
+  const alertText = document.getElementById("alertText");
+  if (!alertPanel || !alertText) return;
+
+  if (!boletosVencendo.length) {
+    alertPanel.classList.add("hidden");
+    return;
+  }
+
+  const empresas = boletosVencendo
+    .map((cliente) => cliente.empresa)
+    .filter(Boolean)
+    .join(", ");
+
+  alertText.textContent = `${boletosVencendo.length} cliente(s) com boleto vencendo hoje${empresas ? `: ${empresas}` : "."}`;
+  alertPanel.classList.remove("hidden");
+}
+
+function preencherMesAtual() {
+  const mesAtual = new Intl.DateTimeFormat("pt-BR", { month: "long" }).format(new Date());
+  atualizarTexto("mesAtual", mesAtual.charAt(0).toUpperCase() + mesAtual.slice(1));
+}
+
+function iniciarGraficoClientes() {
+  const canvas = document.getElementById("graficoClientes");
+  if (!canvas || typeof Chart === "undefined") return;
+
+  new Chart(canvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
+      datasets: [{
+        label: "Clientes cadastrados",
+        data: [5, 10, 8, 12, 20, 15],
+        backgroundColor: "#0f172a",
+        borderRadius: 6,
+        maxBarThickness: 44
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: "#0f172a",
+          padding: 12,
+          titleColor: "#ffffff",
+          bodyColor: "#e2e8f0"
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: "#64748b" }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: "#e2e8f0" },
+          ticks: { color: "#64748b", precision: 0 }
+        }
+      }
+    }
+  });
+}
+
+function atualizarTexto(id, valor) {
+  const elemento = document.getElementById(id);
+  if (elemento) elemento.textContent = valor;
 }

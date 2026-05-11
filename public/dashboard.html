@@ -8,132 +8,184 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
-<body class="bg-gray-100 overflow-x-hidden">
-
-  <!-- Botão de menu (visível apenas no mobile) -->
+<body class="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
   <button
-    class="menu-toggle fixed top-4 left-4 z-50 bg-indigo-900 text-white p-2 rounded-md md:hidden"
-    onclick="toggleSidebar()"
+    id="menuToggle"
+    class="fixed left-4 top-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-slate-950 text-white shadow-sm transition hover:bg-slate-800 md:hidden"
+    type="button"
     title="Abrir menu"
     aria-label="Abrir menu"
   >
     <i class="fas fa-bars"></i>
-    <span class="sr-only">Abrir menu</span>
   </button>
 
-  <!-- Overlay escuro para mobile -->
-  <div
-    id="sidebarOverlay"
-    class="fixed inset-0 bg-black bg-opacity-40 hidden z-40 md:hidden"
-    onclick="toggleSidebar()"
-  ></div>
+  <div id="sidebarOverlay" class="fixed inset-0 z-40 hidden bg-slate-950/50 md:hidden"></div>
 
-  <!-- Sidebar responsiva -->
-  <aside class="sidebar
-    bg-indigo-900 text-white p-6
-    h-screen w-64 z-50
-    transition-transform duration-300
-    md:fixed md:top-0 md:left-0
-    md:translate-x-0
-    fixed top-0 left-0 transform -translate-x-full
-    md:block
-  ">
-    <h2 class="text-2xl font-bold mb-8">Menu</h2>
-    <ul class="space-y-4">
-      <li>
-        <a href="register_client.html" class="flex items-center hover:bg-indigo-700 p-2 rounded">
-          <i class="fas fa-user-plus mr-2"></i> Cadastro de Clientes
-        </a>
-      </li>
-      <li>
-        <a href="list_clients.html" class="flex items-center hover:bg-indigo-700 p-2 rounded">
-          <i class="fas fa-users mr-2"></i> Lista de Clientes
-        </a>
-      </li>
-      <li>
-        <a href="list_users.html" class="flex items-center hover:bg-indigo-700 p-2 rounded">
-          <i class="fas fa-user-cog mr-2"></i> Lista de Usuários
-        </a>
-      </li>
-      <li>
-        <a href="#" class="flex items-center hover:bg-indigo-700 p-2 rounded">
-          <i class="fas fa-chart-bar mr-2"></i> Relatórios
-        </a>
-      </li>
-    </ul>
-    <button
-      onclick="logout()"
-      class="mt-10 bg-red-600 hover:bg-red-700 px-4 py-2 rounded w-full flex items-center justify-center"
-    >
-      <i class="fas fa-sign-out-alt mr-2"></i> Sair
-    </button>
+  <aside
+    id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full flex-col border-r border-slate-800 bg-slate-950 text-white transition-transform duration-300 md:translate-x-0"
+  >
+    <div class="flex h-20 items-center gap-3 border-b border-white/10 px-6">
+      <img src="./images/logojalves.png" alt="Logo" class="h-10 w-10 rounded-lg bg-white object-contain p-1" />
+      <div>
+        <p class="text-sm text-slate-300">Sistema</p>
+        <h1 class="text-lg font-semibold leading-tight">Cadastro</h1>
+      </div>
+    </div>
+
+    <nav class="flex-1 space-y-1 px-4 py-6">
+      <a href="dashboard.html" class="flex items-center gap-3 rounded-lg bg-white px-3 py-3 text-sm font-medium text-slate-950">
+        <i class="fas fa-chart-line w-5 text-center"></i>
+        Dashboard
+      </a>
+      <a href="register_client.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-user-plus w-5 text-center"></i>
+        Cadastro de Clientes
+      </a>
+      <a href="list_clients.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-users w-5 text-center"></i>
+        Lista de Clientes
+      </a>
+      <a href="list_users.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-user-cog w-5 text-center"></i>
+        Lista de Usuários
+      </a>
+      <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-file-lines w-5 text-center"></i>
+        Relatórios
+      </a>
+    </nav>
+
+    <div class="border-t border-white/10 p-4">
+      <button
+        id="logoutButton"
+        class="flex w-full items-center justify-center gap-2 rounded-lg bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-700"
+        type="button"
+      >
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+      </button>
+    </div>
   </aside>
 
-  <!-- Conteúdo principal -->
-  <main class="main-content p-6 pt-20 md:pt-6 transition-all md:ml-64">
-    <h1 class="text-3xl font-bold mb-6">Bem-vindo ao Dashboard</h1>
+  <main class="min-h-screen px-4 pb-8 pt-20 sm:px-6 md:ml-72 md:px-8 md:pt-8">
+    <header class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-sm font-medium uppercase tracking-wide text-slate-500">Resumo geral</p>
+        <h2 class="mt-1 text-3xl font-bold tracking-tight text-slate-950">Dashboard</h2>
+        <p class="mt-2 max-w-2xl text-sm text-slate-600">
+          Acompanhe clientes, vencimentos e reajustes que precisam de atenção.
+        </p>
+      </div>
 
-    <!-- Cards de informações -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-gray-600">Clientes Cadastrados</h3>
-        <p id="totalClientes" class="text-3xl font-bold text-indigo-700">0</p>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a href="register_client.html" class="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
+          <i class="fas fa-plus"></i>
+          Novo cliente
+        </a>
+        <a href="list_clients.html" class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100">
+          <i class="fas fa-list"></i>
+          Ver clientes
+        </a>
       </div>
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-gray-600">Clientes Vencendo Hoje</h3>
-        <p id="clientesVencendo" class="text-3xl font-bold text-red-600">0</p>
-      </div>
-      <div class="bg-white shadow rounded-lg p-6 text-center col-span-1 sm:col-span-2">
-        <h3 class="text-gray-600">Reajuste no Mês</h3>
-        <div id="empresas-reajuste" class="text-lg text-gray-800 mt-2">Nenhum reajuste encontrado</div>
-      </div>
-    </div>
+    </header>
 
-    <!-- Gráfico -->
-    <div class="bg-white shadow rounded-lg p-6">
-      <h3 class="text-lg font-semibold mb-4">Evolução de Clientes por Mês</h3>
-      <canvas id="graficoClientes"></canvas>
-    </div>
+    <section id="alertPanel" class="mb-6 hidden rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900">
+      <div class="flex items-start gap-3">
+        <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700">
+          <i class="fas fa-triangle-exclamation"></i>
+        </span>
+        <div>
+          <h3 class="font-semibold">Atenção operacional</h3>
+          <p id="alertText" class="mt-1 text-sm">Existem clientes com boleto vencendo hoje.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p class="text-sm font-medium text-slate-500">Clientes cadastrados</p>
+            <p id="totalClientes" class="mt-3 text-4xl font-bold text-slate-950">0</p>
+          </div>
+          <span class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-sky-50 text-sky-700">
+            <i class="fas fa-users text-lg"></i>
+          </span>
+        </div>
+        <p class="mt-4 text-sm text-slate-500">Total registrado no sistema.</p>
+      </article>
+
+      <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p class="text-sm font-medium text-slate-500">Vencendo hoje</p>
+            <p id="clientesVencendo" class="mt-3 text-4xl font-bold text-rose-600">0</p>
+          </div>
+          <span class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-rose-50 text-rose-700">
+            <i class="fas fa-calendar-day text-lg"></i>
+          </span>
+        </div>
+        <p class="mt-4 text-sm text-slate-500">Boletos que exigem acompanhamento.</p>
+      </article>
+
+      <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p class="text-sm font-medium text-slate-500">Reajuste no mês</p>
+            <p id="totalReajustes" class="mt-3 text-4xl font-bold text-emerald-600">0</p>
+          </div>
+          <span class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+            <i class="fas fa-arrow-trend-up text-lg"></i>
+          </span>
+        </div>
+        <p class="mt-4 text-sm text-slate-500">Empresas previstas para reajuste.</p>
+      </article>
+
+      <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p class="text-sm font-medium text-slate-500">Mês atual</p>
+            <p id="mesAtual" class="mt-3 text-3xl font-bold text-slate-950">-</p>
+          </div>
+          <span class="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
+            <i class="fas fa-calendar text-lg"></i>
+          </span>
+        </div>
+        <p class="mt-4 text-sm text-slate-500">Base dos reajustes exibidos.</p>
+      </article>
+    </section>
+
+    <section class="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+      <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-slate-950">Evolução de clientes</h3>
+            <p class="text-sm text-slate-500">Volume cadastrado por mês.</p>
+          </div>
+          <span class="inline-flex w-fit items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-600">
+            <i class="fas fa-chart-column"></i>
+            Últimos 6 meses
+          </span>
+        </div>
+        <div class="h-64">
+          <canvas id="graficoClientes"></canvas>
+        </div>
+      </article>
+
+      <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="mb-5">
+          <h3 class="text-lg font-semibold text-slate-950">Empresas com reajuste</h3>
+          <p class="text-sm text-slate-500">Lista do mês corrente.</p>
+        </div>
+        <div id="empresas-reajuste" class="max-h-80 overflow-y-auto rounded-lg border border-slate-100 bg-slate-50 p-3 text-sm text-slate-600">
+          Carregando reajustes...
+        </div>
+      </article>
+    </section>
   </main>
 
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="javascripts/dashboard.js"></script>
-  <script>
-    const ctx = document.getElementById('graficoClientes').getContext('2d');
-    const grafico = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-        datasets: [{
-          label: 'Clientes cadastrados',
-          data: [5, 10, 8, 12, 20, 15],
-          backgroundColor: '#4f46e5'
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false }
-        }
-      }
-    });
-  </script>
-
-  <!-- JS para abrir/fechar sidebar -->
-  <script>
-    function toggleSidebar() {
-      const sidebar = document.querySelector('.sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-      sidebar.classList.toggle('-translate-x-full');
-      overlay.classList.toggle('hidden');
-      document.body.classList.toggle('overflow-hidden');
-    }
-
-    function logout() {
-      alert("Você saiu do sistema!");
-      window.location.href = "index.html";
-    }
-  </script>
 </body>
 </html>
