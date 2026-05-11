@@ -48,6 +48,7 @@ function displayClients(clients) {
   clients.forEach((client) => {
     const row = document.createElement("tr");
     row.className = "align-top transition hover:bg-slate-50";
+    const portalLink = normalizarLinkPortal(client.link_portal);
 
     row.innerHTML = `
       <td class="px-5 py-4">
@@ -68,19 +69,41 @@ function displayClients(clients) {
       </td>
       <td class="px-5 py-4 text-sm text-slate-700">
         ${formatarMes(client.mes_reajuste)}
+        <div class="mt-2">${renderStatusBoleto(client.status_boleto)}</div>
       </td>
       <td class="px-5 py-4 text-sm text-slate-700">
         <p class="font-medium">${escapeHtml(client.plataforma || "-")}</p>
         <p class="mt-1 text-xs text-slate-500">${escapeHtml(client.login_portal || "Login não informado")}</p>
-        <button
-          type="button"
-          class="mt-2 inline-flex items-center gap-2 rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-200"
-          data-password="${escapeHtml(client.senha_portal || "")}"
-          onclick="togglePassword(this)"
-        >
-          <i class="fas fa-eye"></i>
-          <span>Mostrar senha</span>
-        </button>
+        ${client.observacoes_boleto ? `<p class="mt-2 max-w-xs text-xs text-slate-500">${escapeHtml(client.observacoes_boleto)}</p>` : ""}
+        <div class="mt-3 flex flex-wrap gap-2">
+          ${portalLink ? `
+            <a
+              href="${escapeAttribute(portalLink)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-lg bg-slate-950 px-2 py-1 text-xs font-semibold text-white transition hover:bg-slate-800"
+            >
+              <i class="fas fa-arrow-up-right-from-square"></i>
+              Portal
+            </a>
+          ` : ""}
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-200"
+            onclick="copyToClipboard('${escapeJs(client.login_portal || "")}', 'Login copiado.')"
+          >
+            <i class="fas fa-copy"></i>
+            Login
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-200"
+            onclick="copyToClipboard('${escapeJs(client.senha_portal || "")}', 'Senha copiada.')"
+          >
+            <i class="fas fa-key"></i>
+            Senha
+          </button>
+        </div>
       </td>
       <td class="px-5 py-4 text-right">
         <div class="flex justify-end gap-2">
@@ -147,7 +170,10 @@ function filterClients() {
       client.operadora,
       client.cnpj_cliente,
       client.plataforma,
-      client.email
+      client.email,
+      client.link_portal,
+      client.status_boleto,
+      client.observacoes_boleto
     ].some((value) => normalizarTexto(value).includes(term));
   });
 
@@ -230,6 +256,20 @@ function togglePassword(button) {
   icon.classList.toggle("fa-eye", showing);
   icon.classList.toggle("fa-eye-slash", !showing);
   label.textContent = showing ? "Mostrar senha" : (password || "Sem senha");
+}
+
+async function copyToClipboard(value, successMessage) {
+  if (!value) {
+    mostrarFeedback("error", "Não há informação para copiar.");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(value);
+    mostrarFeedback("success", successMessage);
+  } catch (error) {
+    mostrarFeedback("error", "Não foi possível copiar automaticamente.");
+  }
 }
 
 function configurarMenu() {
@@ -332,6 +372,22 @@ function formatarMes(value) {
   return meses[index] || "-";
 }
 
+function renderStatusBoleto(status) {
+  const normalizedStatus = status || "Pendente";
+  const styles = {
+    "Pendente": "bg-amber-50 text-amber-700",
+    "Baixado": "bg-sky-50 text-sky-700",
+    "Enviado": "bg-emerald-50 text-emerald-700",
+    "Erro/pendência": "bg-rose-50 text-rose-700"
+  };
+
+  return `
+    <span class="inline-flex rounded-full px-2 py-1 text-xs font-semibold ${styles[normalizedStatus] || styles.Pendente}">
+      ${escapeHtml(normalizedStatus)}
+    </span>
+  `;
+}
+
 function normalizarTexto(value) {
   return String(value || "")
     .toLowerCase()
@@ -346,4 +402,27 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function escapeAttribute(value) {
+  return escapeHtml(value).replace(/`/g, "&#096;");
+}
+
+function escapeJs(value) {
+  return String(value || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "");
+}
+
+function normalizarLinkPortal(value) {
+  if (!value) return "";
+
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+  } catch (error) {
+    return "";
+  }
 }

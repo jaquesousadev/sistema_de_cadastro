@@ -73,7 +73,7 @@ async function verificarBoletosVencendo() {
 
     const regraBoletos = obterRegraBoletos();
     const boletosVencendo = clients.filter((cliente) => {
-      return regraBoletos.dias.includes(Number(cliente.vencimento));
+      return regraBoletos.dias.includes(Number(cliente.vencimento)) && precisaAcompanharBoleto(cliente.status_boleto);
     });
 
     atualizarTexto("clientesVencendo", boletosVencendo.length);
@@ -145,12 +145,45 @@ function atualizarPainelAlerta(boletosVencendo, regraBoletos) {
   alertText.textContent = `Boletos para acompanhamento: ${regraBoletos.rotulo}.`;
   alertCount.textContent = `${boletosVencendo.length} cliente(s)`;
   alertCount.classList.remove("hidden");
-  alertClientList.innerHTML = boletosVencendo.map((cliente) => `
-    <div class="rounded-lg border border-amber-100 bg-white/70 px-3 py-2 text-sm text-amber-950 shadow-sm">
+  alertClientList.innerHTML = boletosVencendo.map((cliente) => {
+    const portalLink = normalizarLinkPortal(cliente.link_portal);
+
+    return `
+    <div class="rounded-lg border border-amber-100 bg-white/70 px-3 py-3 text-sm text-amber-950 shadow-sm">
       <p class="font-semibold leading-snug">${escapeHtml(cliente.empresa || "Empresa sem nome")}</p>
       <p class="mt-1 text-xs text-amber-700">Vencimento: dia ${String(cliente.vencimento).padStart(2, "0")}</p>
+      <div class="mt-3 flex flex-wrap gap-2">
+        ${portalLink ? `
+          <a
+            href="${escapeAttribute(portalLink)}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg bg-amber-900 px-2 py-1 text-xs font-semibold text-white transition hover:bg-amber-800"
+          >
+            <i class="fas fa-arrow-up-right-from-square"></i>
+            Portal
+          </a>
+        ` : ""}
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-lg bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800 transition hover:bg-amber-200"
+          onclick="copyToClipboard('${escapeJs(cliente.login_portal || "")}', 'Login copiado.')"
+        >
+          <i class="fas fa-copy"></i>
+          Login
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-lg bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800 transition hover:bg-amber-200"
+          onclick="copyToClipboard('${escapeJs(cliente.senha_portal || "")}', 'Senha copiada.')"
+        >
+          <i class="fas fa-key"></i>
+          Senha
+        </button>
+      </div>
     </div>
-  `).join("");
+  `;
+  }).join("");
   alertPanel.classList.remove("hidden");
 }
 
@@ -172,6 +205,12 @@ function obterRegraBoletos(dataBase = new Date()) {
     dias: [...new Set(dias)],
     rotulo: isSegundaFeira ? "sábado, domingo e hoje" : "hoje"
   };
+}
+
+function precisaAcompanharBoleto(status) {
+  if (!status) return true;
+
+  return !["Baixado", "Enviado"].includes(status);
 }
 
 function preencherMesAtual() {
@@ -234,4 +273,38 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+async function copyToClipboard(value, successMessage) {
+  if (!value) return;
+
+  try {
+    await navigator.clipboard.writeText(value);
+    console.log(successMessage);
+  } catch (error) {
+    console.error("Não foi possível copiar automaticamente.", error);
+  }
+}
+
+function escapeAttribute(value) {
+  return escapeHtml(value).replace(/`/g, "&#096;");
+}
+
+function escapeJs(value) {
+  return String(value || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "");
+}
+
+function normalizarLinkPortal(value) {
+  if (!value) return "";
+
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+  } catch (error) {
+    return "";
+  }
 }

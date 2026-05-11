@@ -22,7 +22,10 @@ router.post('/create', (req, res) => {
     login_portal: req.body.login_portal,
     senha_portal: req.body.senha_portal,
     cnpj_cliente: req.body.cnpj_cliente,
-    plataforma: req.body.plataforma
+    plataforma: req.body.plataforma,
+    link_portal: req.body.link_portal,
+    observacoes_boleto: req.body.observacoes_boleto,
+    status_boleto: req.body.status_boleto || 'Pendente'
   };
 
   console.log("Dados do cliente para criar:", clientData); // log dos dados
@@ -80,7 +83,10 @@ router.put('/:id', (req, res) => {
       login_portal: req.body.login_portal,
       senha_portal: req.body.senha_portal,
       cnpj_cliente: req.body.cnpj_cliente,
-      plataforma: req.body.plataforma
+      plataforma: req.body.plataforma,
+      link_portal: req.body.link_portal,
+      observacoes_boleto: req.body.observacoes_boleto,
+      status_boleto: req.body.status_boleto || 'Pendente'
     };
 
     console.log("Dados do cliente para atualizar:", clientData); // Log dos dados recebidos

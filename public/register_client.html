@@ -215,6 +215,10 @@
             <input type="text" class="form-input" id="login_portal" name="login_portal" placeholder="Login de acesso" required />
           </div>
           <div>
+            <label for="link_portal" class="mb-2 block text-sm font-medium text-slate-700">Link do portal</label>
+            <input type="url" class="form-input" id="link_portal" name="link_portal" placeholder="https://portal.operadora.com.br" />
+          </div>
+          <div>
             <label for="senha_portal" class="mb-2 block text-sm font-medium text-slate-700">Senha portal operadora</label>
             <div class="relative">
               <input type="password" class="form-input pr-12" id="senha_portal" name="senha_portal" placeholder="Senha de acesso" required />
@@ -222,6 +226,15 @@
                 <i class="fas fa-eye"></i>
               </button>
             </div>
+          </div>
+          <div>
+            <label for="status_boleto" class="mb-2 block text-sm font-medium text-slate-700">Status do boleto</label>
+            <select class="form-input" id="status_boleto" name="status_boleto">
+              <option value="Pendente">Pendente</option>
+              <option value="Baixado">Baixado</option>
+              <option value="Enviado">Enviado</option>
+              <option value="Erro/pendência">Erro/pendência</option>
+            </select>
           </div>
           <div class="lg:col-span-2">
             <label for="senha_email" class="mb-2 block text-sm font-medium text-slate-700">Senha do email</label>
@@ -231,6 +244,10 @@
                 <i class="fas fa-eye"></i>
               </button>
             </div>
+          </div>
+          <div class="lg:col-span-2">
+            <label for="observacoes_boleto" class="mb-2 block text-sm font-medium text-slate-700">Observações do boleto</label>
+            <textarea class="form-input min-h-28 resize-y" id="observacoes_boleto" name="observacoes_boleto" placeholder="Ex.: caminho dentro do portal, instruções de emissão, vencimento em feriados."></textarea>
           </div>
         </div>
       </section>

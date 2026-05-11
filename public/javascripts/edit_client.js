@@ -53,6 +53,9 @@ function preencherFormulario(client) {
   setValue("mes_reajuste", client.mes_reajuste);
   setValue("login_portal", client.login_portal);
   setValue("senha_portal", client.senha_portal);
+  setValue("link_portal", client.link_portal);
+  setValue("status_boleto", client.status_boleto || "Pendente");
+  setValue("observacoes_boleto", client.observacoes_boleto);
   setValue("cnpj_cliente", formatarCnpj(client.cnpj_cliente));
   setValue("plataforma", client.plataforma);
 
