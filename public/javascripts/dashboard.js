@@ -71,13 +71,13 @@ async function verificarBoletosVencendo() {
     const clients = data?.clients;
     if (!Array.isArray(clients)) throw new Error("A resposta da API não contém uma lista de clientes.");
 
-    const diaHoje = String(new Date().getDate()).padStart(2, "0");
+    const regraBoletos = obterRegraBoletos();
     const boletosVencendo = clients.filter((cliente) => {
-      return String(cliente.vencimento).padStart(2, "0") === diaHoje;
+      return regraBoletos.dias.includes(Number(cliente.vencimento));
     });
 
     atualizarTexto("clientesVencendo", boletosVencendo.length);
-    atualizarPainelAlerta(boletosVencendo);
+    atualizarPainelAlerta(boletosVencendo, regraBoletos);
   } catch (error) {
     console.error("Erro ao verificar boletos vencendo:", error);
   }
@@ -129,23 +129,49 @@ async function carregarEmpresasReajuste() {
   }
 }
 
-function atualizarPainelAlerta(boletosVencendo) {
+function atualizarPainelAlerta(boletosVencendo, regraBoletos) {
   const alertPanel = document.getElementById("alertPanel");
   const alertText = document.getElementById("alertText");
-  if (!alertPanel || !alertText) return;
+  const alertCount = document.getElementById("alertCount");
+  const alertClientList = document.getElementById("alertClientList");
+  if (!alertPanel || !alertText || !alertCount || !alertClientList) return;
 
   if (!boletosVencendo.length) {
     alertPanel.classList.add("hidden");
+    alertClientList.innerHTML = "";
     return;
   }
 
-  const empresas = boletosVencendo
-    .map((cliente) => cliente.empresa)
-    .filter(Boolean)
-    .join(", ");
-
-  alertText.textContent = `${boletosVencendo.length} cliente(s) com boleto vencendo hoje${empresas ? `: ${empresas}` : "."}`;
+  alertText.textContent = `Boletos para acompanhamento: ${regraBoletos.rotulo}.`;
+  alertCount.textContent = `${boletosVencendo.length} cliente(s)`;
+  alertCount.classList.remove("hidden");
+  alertClientList.innerHTML = boletosVencendo.map((cliente) => `
+    <div class="rounded-lg border border-amber-100 bg-white/70 px-3 py-2 text-sm text-amber-950 shadow-sm">
+      <p class="font-semibold leading-snug">${escapeHtml(cliente.empresa || "Empresa sem nome")}</p>
+      <p class="mt-1 text-xs text-amber-700">Vencimento: dia ${String(cliente.vencimento).padStart(2, "0")}</p>
+    </div>
+  `).join("");
   alertPanel.classList.remove("hidden");
+}
+
+function obterRegraBoletos(dataBase = new Date()) {
+  const dias = [dataBase.getDate()];
+  const isSegundaFeira = dataBase.getDay() === 1;
+
+  if (isSegundaFeira) {
+    const sabado = new Date(dataBase);
+    sabado.setDate(dataBase.getDate() - 2);
+
+    const domingo = new Date(dataBase);
+    domingo.setDate(dataBase.getDate() - 1);
+
+    dias.unshift(sabado.getDate(), domingo.getDate());
+  }
+
+  return {
+    dias: [...new Set(dias)],
+    rotulo: isSegundaFeira ? "sábado, domingo e hoje" : "hoje"
+  };
 }
 
 function preencherMesAtual() {
@@ -199,4 +225,13 @@ function iniciarGraficoClientes() {
 function atualizarTexto(id, valor) {
   const elemento = document.getElementById(id);
   if (elemento) elemento.textContent = valor;
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }

@@ -1,68 +1,192 @@
-// Busca os usuários do backend
-async function fetchUsers() {
-  try {
-    const response = await fetch('/users');
-    if (!response.ok) throw new Error('Erro ao buscar usuários');
+let usersData = [];
 
-    const { users } = await response.json();
-    window.usersData = users; // Armazena para filtros futuros
-    displayUsers(users);
+document.addEventListener("DOMContentLoaded", () => {
+  configurarMenu();
+  configurarLogout();
+  configurarBusca();
+  fetchUsers();
+});
+
+async function fetchUsers() {
+  setState("loading", "Carregando usuários...");
+
+  try {
+    const response = await fetch("/users");
+    if (!response.ok) throw new Error("Erro ao buscar usuários.");
+
+    const data = await response.json();
+    usersData = Array.isArray(data.users) ? data.users : [];
+
+    atualizarContadores(usersData.length, usersData.length);
+    displayUsers(usersData);
   } catch (error) {
-    alert('Falha ao carregar a lista de usuários: ' + error.message);
+    setState("error", `Falha ao carregar a lista de usuários: ${error.message}`);
   }
 }
 
-// Exibe os usuários em cards modernos
 function displayUsers(users) {
-  const userList = document.getElementById('user-list');
-  userList.innerHTML = '';
+  const userList = document.getElementById("user-list");
+  const tableWrapper = document.getElementById("user-table-wrapper");
+  const state = document.getElementById("user-state");
 
-  users.forEach(user => {
-    const card = document.createElement('div');
-    card.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition';
+  if (!userList || !tableWrapper || !state) return;
 
-    card.innerHTML = `
-      <div class="mb-2 font-semibold text-lg">${user.nome || 'Usuário sem nome'}</div>
-      <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Email:</strong> ${user.email || '—'}</p>
-      <p class="text-sm text-gray-600 dark:text-gray-300"><strong>Função:</strong> ${user.funcao || '—'}</p>
-      <div class="mt-4 flex justify-between">
-        <button class="text-blue-600 hover:text-blue-800 text-sm" onclick="editUser(${user.id})">
-          <i class="fas fa-edit"></i> Editar
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-sm" onclick="deleteUser(${user.id})">
-          <i class="fas fa-trash-alt"></i> Excluir
-        </button>
-      </div>
+  userList.innerHTML = "";
+  atualizarContadores(usersData.length, users.length);
+
+  if (users.length === 0) {
+    tableWrapper.classList.add("hidden");
+    setState("empty", "Nenhum usuário encontrado.");
+    return;
+  }
+
+  state.classList.add("hidden");
+  tableWrapper.classList.remove("hidden");
+
+  users.forEach((user) => {
+    const row = document.createElement("tr");
+    row.className = "align-top transition hover:bg-slate-50";
+
+    row.innerHTML = `
+      <td class="px-5 py-4">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-700">
+            <i class="fas fa-user"></i>
+          </span>
+          <div>
+            <p class="font-semibold text-slate-950">${escapeHtml(user.username || "Usuário sem nome")}</p>
+            <p class="mt-1 text-xs text-slate-500">Conta do sistema</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-5 py-4 text-sm text-slate-700">
+        ${escapeHtml(user.email || "-")}
+      </td>
+      <td class="px-5 py-4">
+        <span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+          Ativo
+        </span>
+      </td>
     `;
 
-    userList.appendChild(card);
+    userList.appendChild(row);
   });
 }
 
-// Redireciona para a página de edição
-function editUser(id) {
-  window.location.href = `/edit_user.html?id=${id}`;
+function configurarBusca() {
+  const searchInput = document.getElementById("search-input");
+  const clearSearch = document.getElementById("clear-search");
+
+  if (!searchInput || !clearSearch) return;
+
+  searchInput.addEventListener("input", () => {
+    const hasValue = searchInput.value.trim() !== "";
+    clearSearch.classList.toggle("hidden", !hasValue);
+    clearSearch.classList.toggle("inline-flex", hasValue);
+    filterUsers();
+  });
+
+  clearSearch.addEventListener("click", () => {
+    searchInput.value = "";
+    clearSearch.classList.add("hidden");
+    clearSearch.classList.remove("inline-flex");
+    displayUsers(usersData);
+    searchInput.focus();
+  });
 }
 
-// Exclui o usuário com confirmação
-async function deleteUser(id) {
-  if (confirm('Tem certeza que deseja excluir este usuário?')) {
-    try {
-      const response = await fetch(`/users/${id}`, { method: 'DELETE' });
-      if (response.ok) {
-        alert('Usuário excluído com sucesso!');
-        fetchUsers(); // Atualiza a lista
-      } else {
-        const result = await response.json();
-        throw new Error(result.message || 'Erro desconhecido');
-      }
-    } catch (error) {
-      alert('Falha ao excluir usuário: ' + error.message);
-    }
+function filterUsers() {
+  const searchInput = document.getElementById("search-input");
+  const term = normalizarTexto(searchInput?.value || "");
+
+  if (!term) {
+    displayUsers(usersData);
+    return;
   }
+
+  const filteredUsers = usersData.filter((user) => {
+    return [
+      user.username,
+      user.email
+    ].some((value) => normalizarTexto(value).includes(term));
+  });
+
+  displayUsers(filteredUsers);
 }
 
-// Carrega os usuários ao abrir a página
-document.addEventListener('DOMContentLoaded', () => {
-  fetchUsers();
-});
+function configurarMenu() {
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+
+  if (!menuToggle || !sidebar || !overlay) return;
+
+  const fecharMenu = () => {
+    sidebar.classList.add("-translate-x-full");
+    overlay.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  };
+
+  const alternarMenu = () => {
+    sidebar.classList.toggle("-translate-x-full");
+    overlay.classList.toggle("hidden");
+    document.body.classList.toggle("overflow-hidden");
+  };
+
+  menuToggle.addEventListener("click", alternarMenu);
+  overlay.addEventListener("click", fecharMenu);
+
+  sidebar.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", fecharMenu);
+  });
+}
+
+function configurarLogout() {
+  const logoutButton = document.getElementById("logoutButton");
+  if (!logoutButton) return;
+
+  logoutButton.addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+}
+
+function setState(type, message) {
+  const state = document.getElementById("user-state");
+  const tableWrapper = document.getElementById("user-table-wrapper");
+  if (!state || !tableWrapper) return;
+
+  const styles = {
+    loading: "p-6 text-sm text-slate-500",
+    empty: "p-6 text-sm text-slate-500",
+    error: "p-6 text-sm text-rose-700 bg-rose-50"
+  };
+
+  tableWrapper.classList.add("hidden");
+  state.className = styles[type] || styles.loading;
+  state.textContent = message;
+  state.classList.remove("hidden");
+}
+
+function atualizarContadores(total, filtered) {
+  const totalCount = document.getElementById("total-count");
+  const filteredCount = document.getElementById("filtered-count");
+
+  if (totalCount) totalCount.textContent = total;
+  if (filteredCount) filteredCount.textContent = filtered;
+}
+
+function normalizarTexto(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}

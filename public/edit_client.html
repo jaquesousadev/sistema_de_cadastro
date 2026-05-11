@@ -1,122 +1,295 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Editar Cliente</title>
-  <!-- Link do Bootstrap -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="icon" type="image/png" href="./images/logojalves.png">
-  <link rel="stylesheet" href="stylesheets/edit_client.css">
+  <link rel="icon" type="image/png" href="./images/logojalves.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
-<body>
-  <div class="edit-client-container">
-    <h1>Editar Cliente</h1>
-    <form id="edit-client-form">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <input type="hidden" id="client-id">
-          <label for="empresa">Empresa:</label>
-          <input type="text" id="empresa" name="empresa" required>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="operadora">Operadora:</label>
-          <input type="text" id="operadora" name="operadora" required>
-        </div>
+<body class="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
+  <button
+    id="menuToggle"
+    class="fixed left-4 top-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-slate-950 text-white shadow-sm transition hover:bg-slate-800 md:hidden"
+    type="button"
+    title="Abrir menu"
+    aria-label="Abrir menu"
+  >
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <div id="sidebarOverlay" class="fixed inset-0 z-40 hidden bg-slate-950/50 md:hidden"></div>
+
+  <aside
+    id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full flex-col border-r border-slate-800 bg-slate-950 text-white transition-transform duration-300 md:translate-x-0"
+  >
+    <div class="flex h-20 items-center gap-3 border-b border-white/10 px-6">
+      <img src="./images/logojalves.png" alt="Logo" class="h-10 w-10 rounded-lg bg-white object-contain p-1" />
+      <div>
+        <p class="text-sm text-slate-300">Sistema</p>
+        <h1 class="text-lg font-semibold leading-tight">Cadastro</h1>
       </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="plano">Plano:</label>
-          <input type="text" id="plano" name="plano" required>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="apolice">Nº Apólice/Contrato:</label>
-          <input type="text" id="apolice" name="apolice" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="valor">Valor:</label>
-          <input type="text" id="valor" name="valor" required>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="responsavel">Nome Responsável:</label>
-          <input type="text" id="responsavel" name="responsavel" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="vencimento">Vencimento Boleto:</label>
-          <input type="number" class="form-control" id="vencimento" name="vencimento" min="1" max="31" required>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="vidas">Qtde. Vidas:</label>
-          <input type="text" class="form-control" id="vidas" name="vidas">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="phone">Telefone:</label>
-          <input type="text" id="phone" name="phone" required>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="senha_email">Senha do Email:</label>
-          <input type="text" id="senha_email" name="senha_email" required>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="mes_reajuste">Mês de Reajuste:</label>
-          <select class="form-control" id="mes_reajuste" name="mes_reajuste" required>
-          <option value="">Selecione o mês</option>
-          <option value="1">Janeiro</option>
-          <option value="2">Fevereiro</option>
-          <option value="3">Março</option>
-          <option value="4">Abril</option>
-          <option value="5">Maio</option>
-          <option value="6">Junho</option>
-          <option value="7">Julho</option>
-          <option value="8">Agosto</option>
-          <option value="9">Setembro</option>
-          <option value="10">Outubro</option>
-          <option value="11">Novembro</option>
-          <option value="12">Dezembro</option>
-        </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="login_portal">Login Portal Operadora:</label>
-          <input type="text" id="login_portal" name="login_portal" required>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="senha_portal">Senha Portal Operadora:</label>
-          <input type="text" id="senha_portal" name="senha_portal" required>
-        </div>        
-      </div> 
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="cnpj_cliente">CNPJ:</label>
-          <input type="text" class="form-control" id="cnpj_cliente" name="cnpj_cliente" required>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="plataforma">Plataforma:</label>
-          <input type="text" class="form-control" id="plataforma" name="plataforma" required>
-        </div>
+    </div>
+
+    <nav class="flex-1 space-y-1 px-4 py-6">
+      <a href="dashboard.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-chart-line w-5 text-center"></i>
+        Dashboard
+      </a>
+      <a href="register_client.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-user-plus w-5 text-center"></i>
+        Cadastro de Clientes
+      </a>
+      <a href="list_clients.html" class="flex items-center gap-3 rounded-lg bg-white px-3 py-3 text-sm font-medium text-slate-950">
+        <i class="fas fa-users w-5 text-center"></i>
+        Lista de Clientes
+      </a>
+      <a href="list_users.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-user-cog w-5 text-center"></i>
+        Lista de Usuários
+      </a>
+      <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-file-lines w-5 text-center"></i>
+        Relatórios
+      </a>
+    </nav>
+
+    <div class="border-t border-white/10 p-4">
+      <button
+        id="logoutButton"
+        class="flex w-full items-center justify-center gap-2 rounded-lg bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-700"
+        type="button"
+      >
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <main class="min-h-screen px-4 pb-8 pt-20 sm:px-6 md:ml-72 md:px-8 md:pt-8">
+    <header class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-sm font-medium uppercase tracking-wide text-slate-500">Clientes</p>
+        <h2 class="mt-1 text-3xl font-bold tracking-tight text-slate-950">Editar cliente</h2>
+        <p id="client-title" class="mt-2 max-w-2xl text-sm text-slate-600">
+          Carregando dados do cliente...
+        </p>
       </div>
 
-      <div class="form-group col-md-12 text-right">
-        <button type="submit">Salvar</button>
-        <button type="button" class="btn btn-secundary" onclick="window.location.href='/list_clients.html'">Voltar</button>
+      <a href="list_clients.html" class="inline-flex w-fit items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100">
+        <i class="fas fa-arrow-left"></i>
+        Voltar para lista
+      </a>
+    </header>
+
+    <section id="formFeedback" class="mb-6 hidden rounded-lg border p-4 text-sm"></section>
+
+    <form id="edit-client-form" class="space-y-6">
+      <input type="hidden" id="client-id" name="id" />
+
+      <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="mb-5 flex items-center gap-3">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-sky-50 text-sky-700">
+            <i class="fas fa-building"></i>
+          </span>
+          <div>
+            <h3 class="text-lg font-semibold text-slate-950">Dados da empresa</h3>
+            <p class="text-sm text-slate-500">Informações principais do cliente.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div class="lg:col-span-2">
+            <label for="empresa" class="mb-2 block text-sm font-medium text-slate-700">Empresa</label>
+            <input type="text" class="form-input" id="empresa" name="empresa" placeholder="Nome da empresa" required />
+          </div>
+          <div>
+            <label for="cnpj_cliente" class="mb-2 block text-sm font-medium text-slate-700">CNPJ</label>
+            <input type="text" class="form-input" id="cnpj_cliente" name="cnpj_cliente" placeholder="00.000.000/0000-00" maxlength="18" required />
+          </div>
+          <div>
+            <label for="responsavel" class="mb-2 block text-sm font-medium text-slate-700">Nome responsável</label>
+            <input type="text" class="form-input" id="responsavel" name="responsavel" placeholder="Responsável pelo contrato" required />
+          </div>
+          <div>
+            <label for="phone" class="mb-2 block text-sm font-medium text-slate-700">Telefone</label>
+            <input type="text" class="form-input" id="phone" name="phone" placeholder="(00) 00000-0000" maxlength="15" required />
+          </div>
+          <div>
+            <label for="email" class="mb-2 block text-sm font-medium text-slate-700">Email</label>
+            <input type="email" class="form-input" id="email" name="email" placeholder="cliente@empresa.com.br" required />
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="mb-5 flex items-center gap-3">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+            <i class="fas fa-file-contract"></i>
+          </span>
+          <div>
+            <h3 class="text-lg font-semibold text-slate-950">Plano e contrato</h3>
+            <p class="text-sm text-slate-500">Dados da operadora e condições contratadas.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div>
+            <label for="operadora" class="mb-2 block text-sm font-medium text-slate-700">Operadora</label>
+            <input type="text" class="form-input" id="operadora" name="operadora" placeholder="Nome da operadora" required />
+          </div>
+          <div>
+            <label for="plano" class="mb-2 block text-sm font-medium text-slate-700">Plano</label>
+            <input type="text" class="form-input" id="plano" name="plano" placeholder="Nome do plano" required />
+          </div>
+          <div>
+            <label for="apolice" class="mb-2 block text-sm font-medium text-slate-700">Nº Apólice/Contrato</label>
+            <input type="text" class="form-input" id="apolice" name="apolice" placeholder="Número do contrato" required />
+          </div>
+          <div>
+            <label for="valor" class="mb-2 block text-sm font-medium text-slate-700">Valor</label>
+            <input type="text" class="form-input" id="valor" name="valor" placeholder="R$ 0,00" inputmode="decimal" required />
+          </div>
+          <div>
+            <label for="vidas" class="mb-2 block text-sm font-medium text-slate-700">Qtde. vidas</label>
+            <input type="number" class="form-input" id="vidas" name="vidas" placeholder="0" min="0" />
+          </div>
+          <div>
+            <label for="plataforma" class="mb-2 block text-sm font-medium text-slate-700">Plataforma</label>
+            <input type="text" class="form-input" id="plataforma" name="plataforma" placeholder="Plataforma utilizada" required />
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="mb-5 flex items-center gap-3">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+            <i class="fas fa-calendar-days"></i>
+          </span>
+          <div>
+            <h3 class="text-lg font-semibold text-slate-950">Cobrança e reajuste</h3>
+            <p class="text-sm text-slate-500">Prazos usados nos alertas do dashboard.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div>
+            <label for="vencimento" class="mb-2 block text-sm font-medium text-slate-700">Vencimento boleto</label>
+            <input type="number" class="form-input" id="vencimento" name="vencimento" placeholder="Dia do mês" min="1" max="31" required />
+          </div>
+          <div>
+            <label for="mes_reajuste" class="mb-2 block text-sm font-medium text-slate-700">Mês de reajuste</label>
+            <select class="form-input" id="mes_reajuste" name="mes_reajuste" required>
+              <option value="">Selecione o mês</option>
+              <option value="1">Janeiro</option>
+              <option value="2">Fevereiro</option>
+              <option value="3">Março</option>
+              <option value="4">Abril</option>
+              <option value="5">Maio</option>
+              <option value="6">Junho</option>
+              <option value="7">Julho</option>
+              <option value="8">Agosto</option>
+              <option value="9">Setembro</option>
+              <option value="10">Outubro</option>
+              <option value="11">Novembro</option>
+              <option value="12">Dezembro</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="mb-5 flex items-center gap-3">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
+            <i class="fas fa-key"></i>
+          </span>
+          <div>
+            <h3 class="text-lg font-semibold text-slate-950">Acessos</h3>
+            <p class="text-sm text-slate-500">Credenciais relacionadas ao email e portal da operadora.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div>
+            <label for="login_portal" class="mb-2 block text-sm font-medium text-slate-700">Login portal operadora</label>
+            <input type="text" class="form-input" id="login_portal" name="login_portal" placeholder="Login de acesso" required />
+          </div>
+          <div>
+            <label for="senha_portal" class="mb-2 block text-sm font-medium text-slate-700">Senha portal operadora</label>
+            <div class="relative">
+              <input type="password" class="form-input pr-12" id="senha_portal" name="senha_portal" placeholder="Senha de acesso" required />
+              <button type="button" class="password-toggle" data-target="senha_portal" title="Mostrar ou ocultar senha" aria-label="Mostrar ou ocultar senha">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="lg:col-span-2">
+            <label for="senha_email" class="mb-2 block text-sm font-medium text-slate-700">Senha do email</label>
+            <div class="relative">
+              <input type="password" class="form-input pr-12" id="senha_email" name="senha_email" placeholder="Senha do email cadastrado" required />
+              <button type="button" class="password-toggle" data-target="senha_email" title="Mostrar ou ocultar senha" aria-label="Mostrar ou ocultar senha">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="sticky bottom-0 -mx-4 border-t border-slate-200 bg-slate-50/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 md:-mx-8 md:px-8">
+        <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <a href="list_clients.html" class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100">
+            <i class="fas fa-arrow-left"></i>
+            Voltar
+          </a>
+          <button id="submitButton" type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70">
+            <i class="fas fa-floppy-disk"></i>
+            Salvar alterações
+          </button>
+        </div>
       </div>
     </form>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+  </main>
+
+  <style>
+    .form-input {
+      width: 100%;
+      border-radius: 0.5rem;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      padding: 0.75rem 0.875rem;
+      color: #0f172a;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .form-input:focus {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.12);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 0.375rem;
+      top: 50%;
+      display: inline-flex;
+      height: 2.25rem;
+      width: 2.25rem;
+      transform: translateY(-50%);
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      color: #64748b;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .password-toggle:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+  </style>
+
   <script src="javascripts/edit_client.js"></script>
 </body>
 </html>

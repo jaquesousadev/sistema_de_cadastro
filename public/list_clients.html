@@ -6,56 +6,169 @@
   <title>Lista de Clientes</title>
   <link rel="icon" type="image/png" href="./images/logojalves.png" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            roboto: ['Roboto', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
-<body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-roboto transition-colors duration-300">
+<body class="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
+  <button
+    id="menuToggle"
+    class="fixed left-4 top-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-slate-950 text-white shadow-sm transition hover:bg-slate-800 md:hidden"
+    type="button"
+    title="Abrir menu"
+    aria-label="Abrir menu"
+  >
+    <i class="fas fa-bars"></i>
+  </button>
 
-  <div class="max-w-7xl mx-auto px-4 py-6">
-    
-    <!-- Top bar -->
-    <div class="flex items-center justify-between mb-6">
-      <button onclick="window.location.href = 'dashboard.html'" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-indigo-600">
-        <i class="fas fa-arrow-left"></i> Voltar
+  <div id="sidebarOverlay" class="fixed inset-0 z-40 hidden bg-slate-950/50 md:hidden"></div>
+
+  <aside
+    id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full flex-col border-r border-slate-800 bg-slate-950 text-white transition-transform duration-300 md:translate-x-0"
+  >
+    <div class="flex h-20 items-center gap-3 border-b border-white/10 px-6">
+      <img src="./images/logojalves.png" alt="Logo" class="h-10 w-10 rounded-lg bg-white object-contain p-1" />
+      <div>
+        <p class="text-sm text-slate-300">Sistema</p>
+        <h1 class="text-lg font-semibold leading-tight">Cadastro</h1>
+      </div>
+    </div>
+
+    <nav class="flex-1 space-y-1 px-4 py-6">
+      <a href="dashboard.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-chart-line w-5 text-center"></i>
+        Dashboard
+      </a>
+      <a href="register_client.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-user-plus w-5 text-center"></i>
+        Cadastro de Clientes
+      </a>
+      <a href="list_clients.html" class="flex items-center gap-3 rounded-lg bg-white px-3 py-3 text-sm font-medium text-slate-950">
+        <i class="fas fa-users w-5 text-center"></i>
+        Lista de Clientes
+      </a>
+      <a href="list_users.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-user-cog w-5 text-center"></i>
+        Lista de Usuários
+      </a>
+      <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+        <i class="fas fa-file-lines w-5 text-center"></i>
+        Relatórios
+      </a>
+    </nav>
+
+    <div class="border-t border-white/10 p-4">
+      <button
+        id="logoutButton"
+        class="flex w-full items-center justify-center gap-2 rounded-lg bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-700"
+        type="button"
+      >
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
       </button>
-
-      <button onclick="document.documentElement.classList.toggle('dark')" class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600">
-        Alternar Tema 🌗
-      </button>
     </div>
+  </aside>
 
-    <!-- Título -->
-    <h1 class="text-2xl font-bold mb-4">Lista de Clientes</h1>
+  <main class="min-h-screen px-4 pb-8 pt-20 sm:px-6 md:ml-72 md:px-8 md:pt-8">
+    <header class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-sm font-medium uppercase tracking-wide text-slate-500">Consulta</p>
+        <h2 class="mt-1 text-3xl font-bold tracking-tight text-slate-950">Lista de clientes</h2>
+        <p class="mt-2 max-w-2xl text-sm text-slate-600">
+          Pesquise, edite e acompanhe os dados principais dos clientes cadastrados.
+        </p>
+      </div>
 
-    <!-- Barra de pesquisa -->
-    <div class="flex gap-2 mb-6">
-      <input type="text" id="search-input" placeholder="Digite o nome da empresa" class="flex-1 px-4 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm">
-      <button id="search-button" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm">Pesquisar</button>
-    </div>
+      <a href="register_client.html" class="inline-flex w-fit items-center justify-center gap-2 rounded-lg bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
+        <i class="fas fa-plus"></i>
+        Novo cliente
+      </a>
+    </header>
 
-    <!-- Filtros (opcional) -->
-    <div class="flex flex-wrap gap-2 mb-6">
-      <!-- Filtros dinâmicos podem ser inseridos aqui via JS -->
-    </div>
+    <section id="feedback" class="mb-6 hidden rounded-lg border p-4 text-sm"></section>
 
-    <!-- Lista de clientes gerada dinamicamente -->
-    <div id="client-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Os cards serão inseridos aqui via list_clients.js -->
+    <section class="mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+        <div class="w-full xl:max-w-2xl">
+          <label for="search-input" class="mb-2 block text-sm font-medium text-slate-700">Buscar clientes</label>
+          <div class="relative">
+            <i class="fas fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input
+              type="text"
+              id="search-input"
+              class="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-11 text-sm text-slate-900 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-950/10"
+              placeholder="Empresa, responsável, operadora, CNPJ, plataforma ou email"
+            />
+            <button
+              id="clear-search"
+              class="absolute right-2 top-1/2 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+              type="button"
+              title="Limpar busca"
+              aria-label="Limpar busca"
+            >
+              <i class="fas fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 sm:flex">
+          <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+            <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Total</p>
+            <p id="total-count" class="mt-1 text-2xl font-bold text-slate-950">0</p>
+          </div>
+          <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+            <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Encontrados</p>
+            <p id="filtered-count" class="mt-1 text-2xl font-bold text-emerald-600">0</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+      <div id="client-state" class="p-6 text-sm text-slate-500">Carregando clientes...</div>
+
+      <div id="client-table-wrapper" class="hidden overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Empresa</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Responsável</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Operadora</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Vencimento</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Reajuste</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Portal</th>
+              <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="client-list" class="divide-y divide-slate-100 bg-white"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="delete-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/60 p-4">
+    <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+      <div class="flex items-start gap-3">
+        <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-rose-700">
+          <i class="fas fa-trash"></i>
+        </span>
+        <div>
+          <h3 class="text-lg font-semibold text-slate-950">Excluir cliente</h3>
+          <p id="delete-modal-text" class="mt-2 text-sm text-slate-600">
+            Tem certeza que deseja excluir este cliente?
+          </p>
+        </div>
+      </div>
+      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <button id="cancel-delete" type="button" class="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100">
+          Cancelar
+        </button>
+        <button id="confirm-delete" type="button" class="rounded-lg bg-rose-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-70">
+          Excluir
+        </button>
+      </div>
     </div>
   </div>
-  
+
   <script src="javascripts/list_clients.js"></script>
 </body>
 </html>
