@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   configurarLogout();
   configurarBusca();
   configurarModalExclusao();
+  configurarModalAcessos();
   fetchClients();
 });
 
@@ -54,7 +55,7 @@ function displayClients(clients) {
       <td class="px-5 py-4">
         <div class="max-w-xs">
           <p class="font-semibold text-slate-950">${escapeHtml(client.empresa || "-")}</p>
-          <p class="mt-1 text-xs text-slate-500">${escapeHtml(client.cnpj_cliente || "CNPJ não informado")}</p>
+          <p class="mt-1 text-xs text-slate-500">${escapeHtml(client.cnpj_cliente || "CNPJ nao informado")}</p>
         </div>
       </td>
       <td class="px-5 py-4 text-sm text-slate-700">
@@ -73,39 +74,19 @@ function displayClients(clients) {
       </td>
       <td class="px-5 py-4 text-sm text-slate-700">
         <p class="font-medium">${escapeHtml(client.plataforma || "-")}</p>
-        <p class="mt-1 text-xs text-slate-500">${escapeHtml(client.login_portal || "Login não informado")}</p>
-        ${client.observacoes_boleto ? `<p class="mt-2 max-w-xs text-xs text-slate-500">${escapeHtml(client.observacoes_boleto)}</p>` : ""}
+        <p class="mt-1 text-xs text-slate-500">${portalLink ? "Portal cadastrado" : "Portal nao informado"}</p>
         <div class="mt-3 flex flex-wrap gap-2">
-          ${portalLink ? `
-            <a
-              href="${escapeAttribute(portalLink)}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-lg bg-slate-950 px-2 py-1 text-xs font-semibold text-white transition hover:bg-slate-800"
-            >
-              <i class="fas fa-arrow-up-right-from-square"></i>
-              Portal
-            </a>
-          ` : ""}
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-200"
-            onclick="copyToClipboard('${escapeJs(client.login_portal || "")}', 'Login copiado.')"
-          >
-            <i class="fas fa-copy"></i>
-            Login
-          </button>
-          <button
-            type="button"
-            class="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-200"
-            onclick="copyToClipboard('${escapeJs(client.senha_portal || "")}', 'Senha copiada.')"
+            class="inline-flex items-center gap-2 rounded-lg bg-slate-950 px-2 py-1 text-xs font-semibold text-white transition hover:bg-slate-800"
+            onclick="openAccessModal(${Number(client.id)})"
           >
             <i class="fas fa-key"></i>
-            Senha
+            Login
           </button>
         </div>
       </td>
-      <td class="px-5 py-4 text-right">
+      <td class="sticky right-0 z-10 min-w-28 bg-white px-5 py-4 text-right shadow-[-8px_0_12px_-12px_rgba(15,23,42,0.45)]">
         <div class="flex justify-end gap-2">
           <button
             type="button"
@@ -172,12 +153,87 @@ function filterClients() {
       client.plataforma,
       client.email,
       client.link_portal,
+      client.login_portal,
       client.status_boleto,
       client.observacoes_boleto
     ].some((value) => normalizarTexto(value).includes(term));
   });
 
   displayClients(filteredClients);
+}
+
+function configurarModalAcessos() {
+  const modal = document.getElementById("access-modal");
+  const closeButton = document.getElementById("close-access");
+  const copyLoginButton = document.getElementById("copy-login");
+  const copyPasswordButton = document.getElementById("copy-password");
+
+  if (!modal || !closeButton || !copyLoginButton || !copyPasswordButton) return;
+
+  closeButton.addEventListener("click", closeAccessModal);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closeAccessModal();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+      closeAccessModal();
+    }
+  });
+
+  copyLoginButton.addEventListener("click", () => {
+    copyToClipboard(copyLoginButton.dataset.value || "", "Login copiado.");
+  });
+
+  copyPasswordButton.addEventListener("click", () => {
+    copyToClipboard(copyPasswordButton.dataset.value || "", "Senha copiada.");
+  });
+}
+
+function openAccessModal(id) {
+  const modal = document.getElementById("access-modal");
+  const client = clientsData.find((item) => Number(item.id) === Number(id));
+
+  if (!modal || !client) return;
+
+  const portalLink = normalizarLinkPortal(client.link_portal);
+  const openPortal = document.getElementById("open-portal");
+  const copyLoginButton = document.getElementById("copy-login");
+  const copyPasswordButton = document.getElementById("copy-password");
+
+  setText("access-modal-title", client.empresa || "Acessos do cliente");
+  setText("access-modal-subtitle", client.email || "Dados de login e portal.");
+  setText("access-platform", client.plataforma || "-");
+  setText("access-login", client.login_portal || "Login nao informado");
+  setText("access-password", client.senha_portal || "Senha nao informada");
+  setText("access-portal", portalLink || "Portal nao informado");
+  setText("access-notes", client.observacoes_boleto || "Sem observacoes.");
+
+  if (copyLoginButton) copyLoginButton.dataset.value = client.login_portal || "";
+  if (copyPasswordButton) copyPasswordButton.dataset.value = client.senha_portal || "";
+
+  if (openPortal) {
+    if (portalLink) {
+      openPortal.href = portalLink;
+      openPortal.classList.remove("hidden");
+      openPortal.classList.add("inline-flex");
+    } else {
+      openPortal.href = "#";
+      openPortal.classList.add("hidden");
+      openPortal.classList.remove("inline-flex");
+    }
+  }
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeAccessModal() {
+  const modal = document.getElementById("access-modal");
+  if (!modal) return;
+
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
 }
 
 function configurarModalExclusao() {
@@ -206,7 +262,7 @@ function configurarModalExclusao() {
         throw new Error(result.message || "Erro desconhecido ao excluir cliente.");
       }
 
-      mostrarFeedback("success", "Cliente excluído com sucesso.");
+      mostrarFeedback("success", "Cliente excluido com sucesso.");
       closeDeleteModal();
       await fetchClients();
     } catch (error) {
@@ -226,7 +282,7 @@ function openDeleteModal(id) {
   if (!modal || !text || !client) return;
 
   clientToDelete = client;
-  text.textContent = `Tem certeza que deseja excluir "${client.empresa}"? Esta ação não pode ser desfeita.`;
+  text.textContent = `Tem certeza que deseja excluir "${client.empresa}"? Esta acao nao pode ser desfeita.`;
   modal.classList.remove("hidden");
   modal.classList.add("flex");
 }
@@ -244,23 +300,9 @@ function editClient(id) {
   window.location.href = `/edit_client.html?id=${id}`;
 }
 
-function togglePassword(button) {
-  const icon = button.querySelector("i");
-  const label = button.querySelector("span");
-  const password = button.dataset.password || "";
-  const showing = button.dataset.showing === "true";
-
-  if (!icon || !label) return;
-
-  button.dataset.showing = showing ? "false" : "true";
-  icon.classList.toggle("fa-eye", showing);
-  icon.classList.toggle("fa-eye-slash", !showing);
-  label.textContent = showing ? "Mostrar senha" : (password || "Sem senha");
-}
-
 async function copyToClipboard(value, successMessage) {
   if (!value) {
-    mostrarFeedback("error", "Não há informação para copiar.");
+    mostrarFeedback("error", "Nao ha informacao para copiar.");
     return;
   }
 
@@ -268,7 +310,7 @@ async function copyToClipboard(value, successMessage) {
     await navigator.clipboard.writeText(value);
     mostrarFeedback("success", successMessage);
   } catch (error) {
-    mostrarFeedback("error", "Não foi possível copiar automaticamente.");
+    mostrarFeedback("error", "Nao foi possivel copiar automaticamente.");
   }
 }
 
@@ -356,7 +398,7 @@ function formatarMes(value) {
   const meses = [
     "Janeiro",
     "Fevereiro",
-    "Março",
+    "Marco",
     "Abril",
     "Maio",
     "Junho",
@@ -375,9 +417,10 @@ function formatarMes(value) {
 function renderStatusBoleto(status) {
   const normalizedStatus = status || "Pendente";
   const styles = {
-    "Pendente": "bg-amber-50 text-amber-700",
-    "Baixado": "bg-sky-50 text-sky-700",
-    "Enviado": "bg-emerald-50 text-emerald-700",
+    Pendente: "bg-amber-50 text-amber-700",
+    Baixado: "bg-sky-50 text-sky-700",
+    Enviado: "bg-emerald-50 text-emerald-700",
+    "Erro/pendencia": "bg-rose-50 text-rose-700",
     "Erro/pendência": "bg-rose-50 text-rose-700"
   };
 
@@ -386,6 +429,11 @@ function renderStatusBoleto(status) {
       ${escapeHtml(normalizedStatus)}
     </span>
   `;
+}
+
+function setText(id, value) {
+  const element = document.getElementById(id);
+  if (element) element.textContent = value;
 }
 
 function normalizarTexto(value) {
@@ -402,18 +450,6 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-}
-
-function escapeAttribute(value) {
-  return escapeHtml(value).replace(/`/g, "&#096;");
-}
-
-function escapeJs(value) {
-  return String(value || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "");
 }
 
 function normalizarLinkPortal(value) {
