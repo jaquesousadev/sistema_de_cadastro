@@ -1,6 +1,9 @@
+let dashboardClients = [];
+
 document.addEventListener("DOMContentLoaded", () => {
   configurarMenu();
   configurarLogout();
+  configurarModalAcessos();
   preencherMesAtual();
   iniciarGraficoClientes();
   carregarDashboard();
@@ -70,6 +73,8 @@ async function verificarBoletosVencendo() {
     const data = await response.json();
     const clients = data?.clients;
     if (!Array.isArray(clients)) throw new Error("A resposta da API não contém uma lista de clientes.");
+
+    dashboardClients = clients;
 
     const regraBoletos = obterRegraBoletos();
     const boletosVencendo = clients.filter((cliente) => {
@@ -145,46 +150,97 @@ function atualizarPainelAlerta(boletosVencendo, regraBoletos) {
   alertText.textContent = `Boletos para acompanhamento: ${regraBoletos.rotulo}.`;
   alertCount.textContent = `${boletosVencendo.length} cliente(s)`;
   alertCount.classList.remove("hidden");
-  alertClientList.innerHTML = boletosVencendo.map((cliente) => {
-    const portalLink = normalizarLinkPortal(cliente.link_portal);
-
-    return `
+  alertClientList.innerHTML = boletosVencendo.map((cliente) => `
     <div class="rounded-lg border border-amber-100 bg-white/70 px-3 py-3 text-sm text-amber-950 shadow-sm">
       <p class="font-semibold leading-snug">${escapeHtml(cliente.empresa || "Empresa sem nome")}</p>
       <p class="mt-1 text-xs text-amber-700">Vencimento: dia ${String(cliente.vencimento).padStart(2, "0")}</p>
       <div class="mt-3 flex flex-wrap gap-2">
-        ${portalLink ? `
-          <a
-            href="${escapeAttribute(portalLink)}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-lg bg-amber-900 px-2 py-1 text-xs font-semibold text-white transition hover:bg-amber-800"
-          >
-            <i class="fas fa-arrow-up-right-from-square"></i>
-            Portal
-          </a>
-        ` : ""}
         <button
           type="button"
-          class="inline-flex items-center gap-2 rounded-lg bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800 transition hover:bg-amber-200"
-          onclick="copyToClipboard('${escapeJs(cliente.login_portal || "")}', 'Login copiado.')"
-        >
-          <i class="fas fa-copy"></i>
-          Login
-        </button>
-        <button
-          type="button"
-          class="inline-flex items-center gap-2 rounded-lg bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800 transition hover:bg-amber-200"
-          onclick="copyToClipboard('${escapeJs(cliente.senha_portal || "")}', 'Senha copiada.')"
+          class="inline-flex items-center gap-2 rounded-lg bg-amber-900 px-2 py-1 text-xs font-semibold text-white transition hover:bg-amber-800"
+          onclick="openAccessModal(${Number(cliente.id)})"
         >
           <i class="fas fa-key"></i>
-          Senha
+          Login
         </button>
       </div>
     </div>
-  `;
-  }).join("");
+  `).join("");
   alertPanel.classList.remove("hidden");
+}
+
+function configurarModalAcessos() {
+  const modal = document.getElementById("access-modal");
+  const closeButton = document.getElementById("close-access");
+  const copyLoginButton = document.getElementById("copy-login");
+  const copyPasswordButton = document.getElementById("copy-password");
+
+  if (!modal || !closeButton || !copyLoginButton || !copyPasswordButton) return;
+
+  closeButton.addEventListener("click", closeAccessModal);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closeAccessModal();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+      closeAccessModal();
+    }
+  });
+
+  copyLoginButton.addEventListener("click", () => {
+    copyToClipboard(copyLoginButton.dataset.value || "", "Login copiado.");
+  });
+
+  copyPasswordButton.addEventListener("click", () => {
+    copyToClipboard(copyPasswordButton.dataset.value || "", "Senha copiada.");
+  });
+}
+
+function openAccessModal(id) {
+  const modal = document.getElementById("access-modal");
+  const cliente = dashboardClients.find((item) => Number(item.id) === Number(id));
+
+  if (!modal || !cliente) return;
+
+  const portalLink = normalizarLinkPortal(cliente.link_portal);
+  const openPortal = document.getElementById("open-portal");
+  const copyLoginButton = document.getElementById("copy-login");
+  const copyPasswordButton = document.getElementById("copy-password");
+
+  atualizarTexto("access-modal-title", cliente.empresa || "Acessos do cliente");
+  atualizarTexto("access-modal-subtitle", cliente.email || "Dados de login e portal.");
+  atualizarTexto("access-platform", cliente.plataforma || "-");
+  atualizarTexto("access-login", cliente.login_portal || "Login nao informado");
+  atualizarTexto("access-password", cliente.senha_portal || "Senha nao informada");
+  atualizarTexto("access-portal", portalLink || "Portal nao informado");
+  atualizarTexto("access-notes", cliente.observacoes_boleto || "Sem observacoes.");
+
+  if (copyLoginButton) copyLoginButton.dataset.value = cliente.login_portal || "";
+  if (copyPasswordButton) copyPasswordButton.dataset.value = cliente.senha_portal || "";
+
+  if (openPortal) {
+    if (portalLink) {
+      openPortal.href = portalLink;
+      openPortal.classList.remove("hidden");
+      openPortal.classList.add("inline-flex");
+    } else {
+      openPortal.href = "#";
+      openPortal.classList.add("hidden");
+      openPortal.classList.remove("inline-flex");
+    }
+  }
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeAccessModal() {
+  const modal = document.getElementById("access-modal");
+  if (!modal) return;
+
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
 }
 
 function obterRegraBoletos(dataBase = new Date()) {

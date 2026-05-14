@@ -191,6 +191,76 @@
     </section>
   </main>
 
+  <div id="access-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/60 p-4">
+    <div class="w-full max-w-xl rounded-lg bg-white p-6 shadow-xl">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-700">
+            <i class="fas fa-key"></i>
+          </span>
+          <div>
+            <h3 id="access-modal-title" class="text-lg font-semibold text-slate-950">Acessos do cliente</h3>
+            <p id="access-modal-subtitle" class="mt-1 text-sm text-slate-500">Dados de login e portal.</p>
+          </div>
+        </div>
+        <button
+          id="close-access"
+          type="button"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+          title="Fechar"
+          aria-label="Fechar"
+        >
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Plataforma</p>
+          <p id="access-platform" class="mt-1 text-sm font-medium text-slate-950">-</p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div class="rounded-lg border border-slate-200 p-4">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Login</p>
+            <div class="mt-2 flex items-center justify-between gap-3">
+              <p id="access-login" class="min-w-0 break-all text-sm font-medium text-slate-950">-</p>
+              <button id="copy-login" type="button" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition hover:bg-slate-200" title="Copiar login" aria-label="Copiar login">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="rounded-lg border border-slate-200 p-4">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Senha</p>
+            <div class="mt-2 flex items-center justify-between gap-3">
+              <p id="access-password" class="min-w-0 break-all text-sm font-medium text-slate-950">-</p>
+              <button id="copy-password" type="button" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700 transition hover:bg-slate-200" title="Copiar senha" aria-label="Copiar senha">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Portal</p>
+          <div class="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p id="access-portal" class="min-w-0 break-all text-sm text-slate-700">-</p>
+            <a id="open-portal" href="#" target="_blank" rel="noopener noreferrer" class="hidden shrink-0 items-center justify-center gap-2 rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+              <i class="fas fa-arrow-up-right-from-square"></i>
+              Abrir portal
+            </a>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Observacoes</p>
+          <p id="access-notes" class="mt-2 whitespace-pre-wrap text-sm text-slate-700">-</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="javascripts/dashboard.js"></script>
 </body>
