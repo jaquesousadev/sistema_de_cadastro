@@ -27,6 +27,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/clients', clientsRouter);
 app.use("/dashboard", dashboardRouter);
+app.use("/dashboard.html", dashboardRouter);
 
 
 
