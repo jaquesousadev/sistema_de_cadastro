@@ -114,6 +114,15 @@
             <input type="text" class="form-input" id="responsavel" name="responsavel" placeholder="Responsável pelo contrato" required />
           </div>
           <div>
+            <label for="status_empresa" class="mb-2 block text-sm font-medium text-slate-700">Status da empresa</label>
+            <select class="form-input" id="status_empresa" name="status_empresa" required>
+              <option value="Ativa">Ativa</option>
+              <option value="Em aceitação">Em aceitação</option>
+              <option value="Pendência">Pendência</option>
+              <option value="Cancelada">Cancelada</option>
+            </select>
+          </div>
+          <div>
             <label for="phone" class="mb-2 block text-sm font-medium text-slate-700">Telefone</label>
             <input type="text" class="form-input" id="phone" name="phone" placeholder="(00) 00000-0000" maxlength="15" required />
           </div>

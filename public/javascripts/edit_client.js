@@ -45,6 +45,7 @@ function preencherFormulario(client) {
   setValue("apolice", client.apolice);
   setValue("valor", formatarMoedaValorSalvo(client.valor));
   setValue("responsavel", client.responsavel);
+  setValue("status_empresa", client.status_empresa || "Ativa");
   setValue("vencimento", client.vencimento);
   setValue("vidas", client.vidas);
   setValue("phone", formatarTelefone(client.phone));

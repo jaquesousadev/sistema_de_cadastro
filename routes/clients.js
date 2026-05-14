@@ -7,7 +7,27 @@ function normalizarCampoOpcional(value) {
   return value === undefined || value === null || String(value).trim() === '' ? null : String(value).trim();
 }
 
-function montarClientData(body) {
+function normalizarStatusEmpresa(value, fallback = 'Ativa') {
+  const status = normalizarCampoOpcional(value);
+  if (!status) return fallback;
+
+  const statusNormalizado = status
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  const statusMap = {
+    ativa: 'Ativa',
+    'em aceitacao': 'Em aceitação',
+    pendencia: 'Pendência',
+    cancelada: 'Cancelada',
+    cancelado: 'Cancelada'
+  };
+
+  return statusMap[statusNormalizado] || fallback;
+}
+
+function montarClientData(body, existingClient = {}) {
   return {
     empresa: body.empresa,
     operadora: body.operadora,
@@ -15,6 +35,7 @@ function montarClientData(body) {
     apolice: body.apolice,
     valor: body.valor,
     responsavel: body.responsavel,
+    status_empresa: normalizarStatusEmpresa(body.status_empresa, existingClient.status_empresa || 'Ativa'),
     vencimento: body.vencimento,
     vidas: body.vidas,
     phone: body.phone,
@@ -96,17 +117,28 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id', (req, res) => {
   const clientId = req.params.id;
-  const clientData = montarClientData(req.body);
 
-  console.log('Dados do cliente para atualizar:', clientData);
-
-  Client.updateById(clientId, clientData, (err) => {
-    if (err) {
-      console.error('Erro ao atualizar cliente:', err);
-      return res.status(500).json({ success: false, message: err.message });
+  Client.findById(clientId, (findErr, existingClient) => {
+    if (findErr) {
+      return res.status(500).json({ success: false, message: findErr.message });
     }
 
-    res.json({ success: true, message: 'Cliente atualizado com sucesso!' });
+    if (!existingClient) {
+      return res.status(404).json({ success: false, message: 'Cliente nao encontrado' });
+    }
+
+    const clientData = montarClientData(req.body, existingClient);
+
+    console.log('Dados do cliente para atualizar:', clientData);
+
+    Client.updateById(clientId, clientData, (updateErr) => {
+      if (updateErr) {
+        console.error('Erro ao atualizar cliente:', updateErr);
+        return res.status(500).json({ success: false, message: updateErr.message });
+      }
+
+      res.json({ success: true, message: 'Cliente atualizado com sucesso!' });
+    });
   });
 });
 

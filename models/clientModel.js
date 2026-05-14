@@ -7,6 +7,7 @@ const CLIENT_COLUMNS = [
   'apolice',
   'valor',
   'responsavel',
+  'status_empresa',
   'vencimento',
   'vidas',
   'phone',

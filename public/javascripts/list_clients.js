@@ -59,7 +59,8 @@ function displayClients(clients) {
         </div>
       </td>
       <td class="px-5 py-4 text-sm text-slate-700">
-        ${escapeHtml(client.responsavel || "-")}
+        <p>${escapeHtml(client.responsavel || "-")}</p>
+        <div class="mt-2">${renderStatusEmpresa(client.status_empresa)}</div>
       </td>
       <td class="px-5 py-4 text-sm text-slate-700">
         <p>${escapeHtml(client.operadora || "-")}</p>
@@ -148,6 +149,7 @@ function filterClients() {
     return [
       client.empresa,
       client.responsavel,
+      client.status_empresa,
       client.operadora,
       client.cnpj_cliente,
       client.plataforma,
@@ -429,6 +431,39 @@ function renderStatusBoleto(status) {
       ${escapeHtml(normalizedStatus)}
     </span>
   `;
+}
+
+function renderStatusEmpresa(status) {
+  const statusLabel = normalizarStatusEmpresa(status);
+  const styles = {
+    Ativa: "bg-emerald-50 text-emerald-700",
+    "Em aceitacao": "bg-sky-50 text-sky-700",
+    "Em aceitação": "bg-sky-50 text-sky-700",
+    Pendencia: "bg-amber-50 text-amber-700",
+    Pendência: "bg-amber-50 text-amber-700",
+    Cancelada: "bg-rose-50 text-rose-700",
+    Cancelado: "bg-rose-50 text-rose-700"
+  };
+
+  return `
+    <span class="inline-flex rounded-full px-2 py-1 text-xs font-semibold ${styles[statusLabel] || styles.Ativa}">
+      ${escapeHtml(statusLabel)}
+    </span>
+  `;
+}
+
+function normalizarStatusEmpresa(status) {
+  const rawStatus = String(status || "Ativa").trim();
+  const normalized = normalizarTexto(rawStatus);
+  const statusMap = {
+    ativa: "Ativa",
+    "em aceitacao": "Em aceitação",
+    pendencia: "Pendência",
+    cancelada: "Cancelada",
+    cancelado: "Cancelada"
+  };
+
+  return statusMap[normalized] || rawStatus || "Ativa";
 }
 
 function setText(id, value) {
