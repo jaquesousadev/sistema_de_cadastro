@@ -41,7 +41,7 @@ class Client {
   }
 
   static findAll(callback) {
-    const query = 'SELECT * FROM clients';
+    const query = 'SELECT * FROM clients ORDER BY id DESC';
     db.query(query, (err, result) => {
       if (err) {
         callback(err, null);
