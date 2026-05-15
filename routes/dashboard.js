@@ -66,9 +66,10 @@ router.get("/empresas-reajuste/:mes", async (req, res) => {
         const mesFormatado = String(mes).padStart(2, "0");
         const nomeMes = MESES_REAJUSTE[mes];
         const query = `
-            SELECT id, empresa
+            SELECT id, empresa, created_at
             FROM clients
             WHERE mes_reajuste IN (?, ?, ?)
+              AND YEAR(created_at) <= YEAR(CURDATE()) - 1
             ORDER BY empresa ASC
         `;
 
